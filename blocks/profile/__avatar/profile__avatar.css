@@ -1,0 +1,11 @@
+.profile__avatar {
+    border-radius: 50%;
+    background-size: cover;
+    height: 120px;
+}
+
+@media (max-width: 767px) {
+    .profile__avatar {
+        width: 120px;
+    }
+}

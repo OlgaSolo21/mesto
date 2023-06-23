@@ -1,0 +1,15 @@
+.profile {
+    color: #fff;
+    display: flex;
+    max-width: 880px;
+    max-height: 120px;
+    justify-content: space-between;
+}
+
+@media (max-width: 767px) {
+    .profile {
+        flex-direction: column;
+        align-items: center;
+        max-height: 286px;
+    }
+}
