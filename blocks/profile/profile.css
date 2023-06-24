@@ -1,9 +1,8 @@
 .profile {
     color: #fff;
     display: flex;
-    max-width: 880px;
-    max-height: 120px;
     justify-content: space-between;
+    position: relative;
 }
 
 @media (max-width: 767px) {

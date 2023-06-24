@@ -1,4 +1,6 @@
 .cards__item {
+    display: grid;
+    grid-template-columns: minmax(min-content, max-content);
     background-color: #fff;
     color: #000;
     border-radius: 10px;
