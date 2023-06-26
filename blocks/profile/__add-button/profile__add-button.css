@@ -3,7 +3,7 @@
     background-image: url("../../../images/addButton.svg");
     width: 22px;
     height: 22px;
-    background-color: #000;
+    background-color: transparent;
     background-size: cover;
     box-sizing: border-box;
     position: absolute;
