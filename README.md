@@ -32,4 +32,4 @@
 
 **Ссылка на проект**
 
-* [Mesto](https://olgasolo21.github.io/russian-travel/)
+* [Mesto](https://olgasolo21.github.io/mesto/)
