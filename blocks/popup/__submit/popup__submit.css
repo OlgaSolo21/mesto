@@ -9,11 +9,14 @@
     font-size: 18px;
     line-height: 18px;
     min-height: 50px;
+    min-width: 358px;
 }
 
 @media (max-width: 767px) {
     .popup__submit {
         margin: 0 22px 25px;
         font-size: 14px;
+        min-height: 46px;
+        min-width: 238px;
     }
 }

@@ -1,35 +1,37 @@
 const profileEditButton = document.querySelector('.profile__edit-button')
-const popupEditButton = document.querySelector('.popup_edit_button')
+const popupEditButton = document.querySelector('.popup')
 const buttonCloseEditButton = popupEditButton.querySelector('.popup__close')
 
-function togglePopup() {
-    popupEditButton.classList.toggle('popup_opened')
+function addPopup() {
+    popupEditButton.classList.add('popup_opened')
+    nameInput.value = profileTitle.textContent
+    jobInput.value = profileSubtitle.textContent
 }
 
-profileEditButton.addEventListener('click', togglePopup)
-buttonCloseEditButton.addEventListener('click', togglePopup)
+function closeEditPopup () {
+    popupEditButton.classList.remove('popup_opened')
+}
 
-let popupSubmit = document.querySelector('.popup__submit')
-let profilePopupSubmit = document.querySelector('.popup__container')
-let nameInput = profilePopupSubmit.querySelector('.popup__input_name')
-let jobInput = profilePopupSubmit.querySelector('.popup__input_job')
-let profileTitle = document.querySelector('.profile__title')
-let profileSubtitle = document.querySelector('.profile__subtitle')
+profileEditButton.addEventListener('click', addPopup)
+buttonCloseEditButton.addEventListener('click', closeEditPopup)
 
-    function handleFormSubmit (evt) {
-        evt.preventDefault();
-        profileTitle = profileTitle.value
-        profileSubtitle = profileSubtitle.value
 
-        // Получите значение полей jobInput и nameInput из свойства value
-        document.querySelector('.popup__input_name')
-        document.querySelector('.popup__input_job')
-        // Выберите элементы, куда должны быть вставлены значения полей
-nameInput.textContent = profileTitle
-jobInput.textContent = profileSubtitle
-        // Вставьте новые значения с помощью textContent
+const formElement = document.querySelector('.popup__form')
+const submitPopup = document.querySelector('.popup')
+const nameInput = formElement.querySelector('.popup__input_name')
+const jobInput = formElement.querySelector('.popup__input_job')
+const profileTitle = document.querySelector('.profile__title')
+const profileSubtitle = document.querySelector('.profile__subtitle')
+
+function closeSubmitPopup() {
+    submitPopup.classList.remove('popup_opened')
+}
+
+function handleFormSubmit (evt) {
+    evt.preventDefault()
+    profileTitle.textContent = nameInput.value
+    profileSubtitle.textContent = jobInput.value
+    closeSubmitPopup()
     }
 
-// Прикрепляем обработчик к форме:
-// он будет следить за событием “submit” - «отправка»
-popupSubmit.addEventListener('submit', handleFormSubmit);
+formElement.addEventListener('submit', handleFormSubmit)
