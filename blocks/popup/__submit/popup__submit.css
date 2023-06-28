@@ -8,8 +8,16 @@
     text-align: center;
     font-size: 18px;
     line-height: 18px;
+    font-weight: 400;
     min-height: 50px;
     min-width: 358px;
+    opacity: 1;
+    transition: opacity .5s linear;
+}
+
+.popup__submit:hover {
+    cursor: pointer;
+    opacity: .8;
 }
 
 @media (max-width: 767px) {

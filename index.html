@@ -15,69 +15,71 @@
             <img src="./images/avatar_Profile.jpg" alt="Фото профиля" class="profile__avatar">
             <div class="profile__info">
                 <h1 class="profile__title">Жак-Ив Кусто</h1>
-                <button class="profile__edit-button cursor"></button>
+                <button type="button" aria-label="Edit" class="profile__edit-button cursor"></button>
                 <p class="profile__subtitle">Исследователь океана</p>
             </div>
-            <div class="profile__button cursor"><button class="profile__add-button"></button></div>
+            <button type="button" aria-label="Add" class="profile__add-button cursor"><img src="./images/addButton.svg" alt="Кнопка добавить"></button>
         </section>
-        <ul class="cards">
-            <li class="cards__item">
-                <img src="./images/Kaliningrad.jpg" alt="Калининград" class="cards__image">
-                <div class="cards__content">
-                    <h2 class="cards__title">Калининград</h2>
-                    <div class="cards__like cursor"></div>
-                </div>
-            </li>
-            <li class="cards__item">
-                <img src="./images/altayskiy.jpg" alt="Алтайский край" class="cards__image">
-                <div class="cards__content">
-                    <h2 class="cards__title">Алтайский край</h2>
-                    <div class="cards__like cursor"></div>
-                </div>
-            </li>
-            <li class="cards__item">
-                <img src="./images/baikal.jpg" alt="Байкал" class="cards__image">
-                <div class="cards__content">
-                    <h2 class="cards__title">Байкал</h2>
-                    <div class="cards__like cursor"></div>
-                </div>
-            </li>
-            <li class="cards__item">
-                <img src="./images/karachaevo.jpg" alt="Карачаево-Черкессия" class="cards__image">
-                <div class="cards__content">
-                    <h2 class="cards__title">Карачаево-Черкессия</h2>
-                    <div class="cards__like cursor"></div>
-                </div>
-            </li>
-            <li class="cards__item">
-                <img src="./images/sochi.jpg" alt="Сочи" class="cards__image">
-                <div class="cards__content">
-                    <h2 class="cards__title">Сочи</h2>
-                    <div class="cards__like cursor"></div>
-                </div>
-            </li>
-            <li class="cards__item">
-                <img src="./images/SPB.jpg" alt="Санкт-Петербург" class="cards__image">
-                <div class="cards__content">
-                    <h2 class="cards__title">Санкт-Петербург</h2>
-                    <div class="cards__like cursor"></div>
-                </div>
-            </li>
-        </ul>
+        <section class="cards">
+            <ul class="cards__elements">
+                <li class="cards__item">
+                    <img src="./images/Kaliningrad.jpg" alt="Калининград" class="cards__image">
+                    <div class="cards__content">
+                        <h2 class="cards__title">Калининград</h2>
+                        <button type="button" aria-label="Check" class="cards__like"></button>
+                    </div>
+                </li>
+                <li class="cards__item">
+                    <img src="./images/altayskiy.jpg" alt="Алтайский край" class="cards__image">
+                    <div class="cards__content">
+                        <h2 class="cards__title">Алтайский край</h2>
+                        <button type="button" aria-label="Check" class="cards__like"></button>
+                    </div>
+                </li>
+                <li class="cards__item">
+                    <img src="./images/baikal.jpg" alt="Байкал" class="cards__image">
+                    <div class="cards__content">
+                        <h2 class="cards__title">Байкал</h2>
+                        <button type="button" aria-label="Check" class="cards__like"></button>
+                    </div>
+                </li>
+                <li class="cards__item">
+                    <img src="./images/karachaevo.jpg" alt="Карачаево-Черкессия" class="cards__image">
+                    <div class="cards__content">
+                        <h2 class="cards__title">Карачаево-Черкессия</h2>
+                        <button type="button" aria-label="Check" class="cards__like"></button>
+                    </div>
+                </li>
+                <li class="cards__item">
+                    <img src="./images/sochi.jpg" alt="Сочи" class="cards__image">
+                    <div class="cards__content">
+                        <h2 class="cards__title">Сочи</h2>
+                        <button type="button" aria-label="Check" class="cards__like"></button>
+                    </div>
+                </li>
+                <li class="cards__item">
+                    <img src="./images/SPB.jpg" alt="Санкт-Петербург" class="cards__image">
+                    <div class="cards__content">
+                        <h2 class="cards__title">Санкт-Петербург</h2>
+                        <button type="button" aria-label="Check" class="cards__like"></button>
+                    </div>
+                </li>
+            </ul>
+        </section>
     </main>
     <footer class="footer">
         <p class="footer__copyright">© 2020 Mesto Russia</p>
     </footer>
 <div class="popup">
     <div class="popup__container">
-        <button class="popup__close cursor"></button>
+        <button type="button" aria-label="Close" class="popup__close cursor"></button>
         <h2 class="popup__title">Редактировать профиль</h2>
-        <form class="popup__form">
+        <form class="popup__form" name="popup-profile">
             <fieldset class="popup__content">
-                <input type="text" name="UserName" value="" class="popup__input popup__input_name">
-                <input type="text" name="UserJob" value="" class="popup__input popup__input_job">
+                <input type="text" name="UserName" value="" class="popup__input popup__input_type_name">
+                <input type="text" name="UserJob" value="" class="popup__input popup__input_type_job">
             </fieldset>
-            <button class="popup__submit cursor">Сохранить</button>
+            <button type="submit" class="popup__submit">Сохранить</button>
         </form>
     </div>
 </div>
