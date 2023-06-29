@@ -16,8 +16,9 @@
 
 @media (max-width: 767px) {
     .profile__title {
-        text-align: end;
+        max-width: 189px;
+        justify-self: end;
         font-size: 27px;
-        line-height: 26px;
+        line-height: 32px;
     }
 }
