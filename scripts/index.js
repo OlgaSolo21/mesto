@@ -13,6 +13,11 @@ const addPopupButton = document.querySelector('.popup_add')
 const closePopupButton = addPopupButton.querySelector('.popup_button')
 const addFormElement = document.querySelector('.popup_profile')
 
+// константы для открытия фото
+const openImg = document.querySelector('.cards__image')
+const openPopupImg = document.querySelector('.open')
+const closeImg = document.querySelector('.popup_close-img')
+
 //переменные для добавления фото НЕ СДЕЛАНО
 const addCardNew = document.querySelector('.cards__item')
 const placeInput = addFormElement.querySelector('.popup__input_type_place')
@@ -44,19 +49,28 @@ function closePopupAdd() {
     addPopupButton.classList.remove('popup_opened')
 }
 // функция сохранения нового фото НЕ СДЕЛАНО
-function handleAddPopup(evt) {
-    evt.preventDefault()
-    placeInput.value = addCardNew
-    linkInput.value = addCardNew
-    initialCards.append(placeInput, linkInput)
-    closePopupAdd()
+// function handleAddPopup(evt) {
+//     evt.preventDefault()
+//     placeInput.value = addCardNew
+//     linkInput.value = addCardNew
+//     initialCards.append(placeInput, linkInput)
+//     closePopupAdd()
+// }
+
+// пишем функции на попап открытия фото
+function openImageCard() {
+    openPopupImg.classList.add('popup_opened')
 }
 
+// вешаем слушатели на попап профиля
 profileEditButton.addEventListener('click', addPopup)
 buttonCloseEditButton.addEventListener('click', closeEditPopup)
 formElement.addEventListener('submit', handleFormSubmit)
 
-// вешаем слушатель на кнопку добавления фото
+// вешаем слушатель на попап добавления фото
 addButtonProfile.addEventListener('click', openPopupAdd)
 closePopupButton.addEventListener('click', closePopupAdd)
 addFormElement.addEventListener('submit', handleAddPopup)
+
+// вешаем слушатели на попап открытия фото
+openImg.addEventListener('click', openImageCard)

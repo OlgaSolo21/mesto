@@ -53,10 +53,18 @@
             </form>
         </div>
     </div>
-    <template id="cards">
+    <div class="open">
+        <div class="open__container">
+            <button type="button" aria-label="Close" class="popup__close cursor popup_close-img"></button>
+            <fieldset class="">
+                <input type="text" name="UserPlace" value="" class="">
+            </fieldset>
+        </div>
+    </div>
+    <template id="cards" class="card_template">
         <li class="cards__item">
-            <img class="cards__image" src="" alt="фоторяд">
-            <button class="cards__trash"></button>
+            <img class="cards__image cursor" src="" alt="фоторяд">
+            <button class="cards__trash cursor"></button>
             <div class="cards__content">
                 <h2 class="cards__title"></h2>
                 <button type="button" aria-label="Check" class="cards__like"></button>

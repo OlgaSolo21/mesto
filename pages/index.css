@@ -31,5 +31,9 @@
 @import url(../blocks/popup/__content/popup__content.css);
 @import url(../blocks/popup/__input/popup__input.css);
 @import url(../blocks/popup/__submit/popup__submit.css);
+@import url(../blocks/open/open.css);
+@import url(../blocks/open/__container/open__container.css);
+
+
 
 
