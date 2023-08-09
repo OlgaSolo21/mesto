@@ -36,35 +36,65 @@ const initialCards = [
 // находим список ul
 const cardsElement = document.querySelector('.cards__elements')
 // находим template по id и получаем достум в контенту
-const template = document.querySelector('#cards').content
+const template = document.querySelector('.card_template').content
 
-//перебираем массив и добавляем карточки
-initialCards.forEach(function (card) {
+// функция рендеринга массива
+function renderArray() {
+    initialCards.forEach(renderCard)
+}
+//функция рендеринга карточек из массива (перебираем массив и добавляем карточки)
+function renderCard(elements) {
     // находим и клонируем содержимое темплейта
-    const templateElement = template.querySelector('.cards__item').cloneNode(true)
+    const templateElement = template.cloneNode(true)
     // наполняем содержимым темплейт
-    templateElement.querySelector('.cards__image').src = card.link
-    templateElement.querySelector('.cards__title').textContent = card.name
+    templateElement.querySelector('.cards__image').src = elements.link
+    templateElement.querySelector('.cards__title').textContent = elements.name
+
+    setListenerTemplate(templateElement)
     // отображаем на странице массив
     cardsElement.append(templateElement)
-    // настраиваем кнопку лайк по тренажеру урока 8 тема 3
-    templateElement.querySelector('.cards__like').addEventListener('click', function (evt) {
-        evt.target.classList.toggle('cards__like_active');
-    })
-    // вписываем функцию удаления карточки
-    deleteCard(templateElement);
-})
+}
+renderArray();
 
-// настраиваем кнопку удаления карточки
-function deleteCard(card) {
+// пишем функцию для кнопок удаление и лайк
+function setListenerTemplate(card) {
     const trashButton = card.querySelector('.cards__trash')
     trashButton.addEventListener('click', trashCard)
+
+    const likeButton = card.querySelector('.cards__like')
+    likeButton.addEventListener('click', likeCard)
+
+    const openImg = card.querySelector('.cards__image')
+    openImg.addEventListener('click', openCard)
 }
+
+// функция лайка карточки (тема 3 урок 8 5 спринт)
+function likeCard(evt) {
+    const likeCardItem = evt.target.classList.toggle('cards__like_active');
+    likeCardItem.setAttribute('disabled', true);
+}
+
+// функци удаления карточки
 function trashCard(evt) {
     const trashCardItem = evt.target.closest('.cards__item');
     trashCardItem.remove();
 }
 
+//НА ЭТОМ МОМЕНТЕ НЕ СДЕЛАНО
+const openCardItem = document.querySelector('.open_image')
+const openPopupText = openCardItem.querySelector('.open_text')
+const openFoto = openCardItem.querySelector('.open__img')
+const cardTitle = document.querySelector('.cards__title')
+const cardImg = document.querySelector('.cards__image')
+// функция открытия фото в карточке
+function openCard() {
+
+    openCardItem.classList.add('popup_opened')
+
+
+    openPopupText.value = cardTitle.textContent
+    openFoto.src = cardImg.src
+}
 
 
 
