@@ -22,80 +22,73 @@ const initialCards = [
     {
         name: 'Санкт-Петербург',
         link: 'https://images.unsplash.com/photo-1610045129185-a421e70e755f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=417&q=80'
-    },
-    {
-        name: 'Сочи',
-        link: 'https://images.unsplash.com/photo-1567245597540-5232c358e457?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80'
-    },
-    {
-        name: 'Санкт-Петербург',
-        link: 'https://images.unsplash.com/photo-1610045129185-a421e70e755f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=417&q=80'
     }
 ];
 
-// находим список ul
+// находим константы
 const cardsElement = document.querySelector('.cards__elements')
-// находим template по id и получаем достум в контенту
-const template = document.querySelector('.card_template').content
+const openCardItem = document.querySelector('.popup_img')
+const openPopupText = openCardItem.querySelector('.open__text')
+const openFoto = document.querySelector('.open__img')
 
 // функция рендеринга массива
 function renderArray() {
     initialCards.forEach(renderCard)
 }
-//функция рендеринга карточек из массива (перебираем массив и добавляем карточки)
-function renderCard(elements) {
+//функция рендеринга карточек из массива (перебираем массив и добавляем карточки, кнопка лайк, удалить, открытие фото)
+function renderCard(element) {
+    // находим template по id и получаем достум в контенту
+    const template = document.querySelector('.card_template').content
     // находим и клонируем содержимое темплейта
-    const templateElement = template.cloneNode(true)
+    const templateElement = template.querySelector('.cards__item').cloneNode(true)
     // наполняем содержимым темплейт
-    templateElement.querySelector('.cards__image').src = elements.link
-    templateElement.querySelector('.cards__title').textContent = elements.name
-
-    setListenerTemplate(templateElement)
+    const imageLink = templateElement.querySelector('.cards__image')
+    imageLink.src = element.link
+    const textName = templateElement.querySelector('.cards__title')
+    textName.textContent = element.name
+    // создаем кнопку удаления и вешаем на нее слушатель
+    templateElement.querySelector('.cards__trash').addEventListener('click', () => {
+        templateElement.remove()
+    })
+    // создаем кнопку лайка и вешаем на нее слушатель
+    templateElement.querySelector('.cards__like').addEventListener('click', function (evt) {
+        evt.target.classList.toggle('cards__like_active');
+    })
     // отображаем на странице массив
     cardsElement.append(templateElement)
+    // создаем попап открытие фото
+    imageLink.addEventListener('click', () => {
+        openFullCard ()
+    })
+    function openFullCard() {
+        openFoto.src = imageLink.src
+        openPopupText.value = textName.textContent
+        openCardItem.classList.add('popup_opened')
+    }
+    // функция закрытия попапа с фото
+    const closeImg = document.querySelector('.popup_close-img')
+    closeImg.addEventListener('click', () => {
+        openCardItem.classList.remove('popup_opened')
+    })
 }
-renderArray();
+renderArray()
 
-// пишем функцию для кнопок удаление и лайк
-function setListenerTemplate(card) {
-    const trashButton = card.querySelector('.cards__trash')
-    trashButton.addEventListener('click', trashCard)
+// константы кнопки addbutton 5пр
+const addButtonProfile = document.querySelector('.profile__add-button')
+const addPopupButton = document.querySelector('.popup_add')
+const closePopupButton = addPopupButton.querySelector('.popup_button')
+//const addFormElement = document.querySelector('.popup_profile')
 
-    const likeButton = card.querySelector('.cards__like')
-    likeButton.addEventListener('click', likeCard)
-
-    const openImg = card.querySelector('.cards__image')
-    openImg.addEventListener('click', openCard)
+// функция открытия попап кнопки добавления
+function openPopupAdd() {
+    addPopupButton.classList.add('popup_opened')
 }
-
-// функция лайка карточки (тема 3 урок 8 5 спринт)
-function likeCard(evt) {
-    const likeCardItem = evt.target.classList.toggle('cards__like_active');
-    likeCardItem.setAttribute('disabled', true);
-}
-
-// функци удаления карточки
-function trashCard(evt) {
-    const trashCardItem = evt.target.closest('.cards__item');
-    trashCardItem.remove();
-}
-
-//НА ЭТОМ МОМЕНТЕ НЕ СДЕЛАНО
-const openCardItem = document.querySelector('.open_image')
-const openPopupText = openCardItem.querySelector('.open_text')
-const openFoto = openCardItem.querySelector('.open__img')
-const cardTitle = document.querySelector('.cards__title')
-const cardImg = document.querySelector('.cards__image')
-// функция открытия фото в карточке
-function openCard() {
-
-    openCardItem.classList.add('popup_opened')
-
-
-    openPopupText.value = cardTitle.textContent
-    openFoto.src = cardImg.src
+// функция закрытия попап кнопки добавления
+function closePopupAdd() {
+    addPopupButton.classList.remove('popup_opened')
 }
 
-
-
-
+// вешаем слушатель на попап добавления фото
+addButtonProfile.addEventListener('click', openPopupAdd)
+closePopupButton.addEventListener('click', closePopupAdd)
+//addFormElement.addEventListener('submit', handleAddPopup)
