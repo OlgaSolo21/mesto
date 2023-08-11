@@ -77,7 +77,6 @@ function renderCard(element) {
         openCardItem.classList.remove('popup_opened')
     })
 
-    addImgPopup (element.link, element.name)
     // отображаем на странице массив
     cardsElement.append(templateElement)
 }

@@ -53,8 +53,7 @@ const captionFullScreenInput = document.querySelector('.popup__caption') // ин
 const closeFullScreen = document.querySelector('.popup__close_type_fullscreen')
 
 // константы темплейта
-const templateCardImage = document.querySelector('.cards__image')
-const templateCardTitle = document.querySelector('.cards__title')
+const template = document.querySelector('.cards_template').content // находим весь темплейт и получаем доступ к его контенту
 
 // универсальная функция открытия попапов
 // в функцию передали параметр попап, далее в уникальных ф-ях вместо popup будем ставить константы каждого попапа
@@ -89,39 +88,53 @@ function handleEditFormSubmit(evt) { // функция обработки отп
 }
 formElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
 
-// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним
-function openAddPopup() { //функция открытия
-    openPopup(popupAdd)
-}
-buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
-
-function closeAddPopup() { //функция закрытия
-    closePopup(popupAdd)
-}
-closeAdd.addEventListener('click', closeAddPopup) // слушатель кнопки закрытия попапа добавления новой карточки с местом
-
-function f() { //функция создания новой карточки для добавления
-
-}
-
-function f1() { // функция клона массива для создания новой карточки для добавления
-
-}
-
-function f2() { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
-
-}
-addFormButton.addEventListener('submit', funk) // слушатель формы инпутов добавления новой карточки
-
-// ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН (не сделано)
-// function openAddPopup() {
+// // ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним !!не сделано пока не пропишу массив!!
+// function openAddPopup() { //функция открытия
 //     openPopup(popupAdd)
-//     imageAddInput.src = templateCardImage.src
-//     titleAddInput.value = templateCardTitle.textContent
-//     openPopup(popupAdd)
+// }
+// buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
+//
+// function closeAddPopup() { //функция закрытия
+//     closePopup(popupAdd)
+// }
+// closeAdd.addEventListener('click', closeAddPopup) // слушатель кнопки закрытия попапа добавления новой карточки с местом
+//
+// function f() { //функция создания новой карточки для добавления
+//
+// }
+//
+// function f1() { // функция клона массива для создания новой карточки для добавления
+//
+// }
+//
+// function f2() { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
+//
+// }
+// addFormButton.addEventListener('submit', funk) // слушатель формы инпутов добавления новой карточки
+
+// // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН !!не сделано пока не пропишу массив!!
+// function openFullScreenPopup() {
+//     openPopup(popupFullScreen)
+//     imageFullScreenInput.src = templateCardImage.src
+//     captionFullScreenInput.value = templateCardTitle.textContent
 // }
 
 
+// РАБОТА С ТЕМПЛЕЙТОМ (массив карточек)
+function frameArray() {
+    initialCards.forEach(frameCardsTemplate)
+}
+function frameCardsTemplate(card) { // функция клонирования карточек темплейта
+    const cardTemplate = template.querySelector('.cards__item').cloneNode(true) // клонировали li и объявили пее в переменную
+    const templateCardImage = template.querySelector('.cards__image')
+    const templateCardTitle = template.querySelector('.cards__title')
+    templateCardImage.src = card.link // нашли картинку в темплей и навесили на нее ссылку из массива
+    templateCardTitle.textContent = card.name // нашли название места и навесили на него имя из массива
+
+    cardsElement.append(cardTemplate)
+}
+
+frameArray()
 
 
 
