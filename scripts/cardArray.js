@@ -25,11 +25,21 @@ const initialCards = [
     }
 ];
 
-// находим константы
+// находим константы массива и попап открытия фото
 const cardsElement = document.querySelector('.cards__elements')
+const template = document.querySelector('.card_template').content
 const openCardItem = document.querySelector('.popup_img')
 const openPopupText = openCardItem.querySelector('.open__text')
 const openFoto = document.querySelector('.open__img')
+const imageLink = document.querySelector('.cards__image')
+const textName = document.querySelector('.cards__title')
+// константы кнопки addbutton 5пр
+const addButtonProfile = document.querySelector('.profile__add-button')
+const addPopupButton = document.querySelector('.popup_add')
+const closePopupButton = addPopupButton.querySelector('.popup_button')
+const addFormButton = document.querySelector('.add_card')
+const namePlaceAddCard = addFormButton.querySelector('.popup__input_type_place')
+const linkPlaceAddCard = addFormButton.querySelector('.popup__input_type_link')
 
 // функция рендеринга массива
 function renderArray() {
@@ -37,8 +47,6 @@ function renderArray() {
 }
 //функция рендеринга карточек из массива (перебираем массив и добавляем карточки, кнопка лайк, удалить, открытие фото)
 function renderCard(element) {
-    // находим template по id и получаем достум в контенту
-    const template = document.querySelector('.card_template').content
     // находим и клонируем содержимое темплейта
     const templateElement = template.querySelector('.cards__item').cloneNode(true)
     // наполняем содержимым темплейт
@@ -54,8 +62,6 @@ function renderCard(element) {
     templateElement.querySelector('.cards__like').addEventListener('click', function (evt) {
         evt.target.classList.toggle('cards__like_active');
     })
-    // отображаем на странице массив
-    cardsElement.append(templateElement)
     // создаем попап открытие фото
     imageLink.addEventListener('click', () => {
         openFullCard ()
@@ -70,14 +76,10 @@ function renderCard(element) {
     closeImg.addEventListener('click', () => {
         openCardItem.classList.remove('popup_opened')
     })
+    // отображаем на странице массив
+    cardsElement.append(templateElement)
 }
 renderArray()
-
-// константы кнопки addbutton 5пр
-const addButtonProfile = document.querySelector('.profile__add-button')
-const addPopupButton = document.querySelector('.popup_add')
-const closePopupButton = addPopupButton.querySelector('.popup_button')
-//const addFormElement = document.querySelector('.popup_profile')
 
 // функция открытия попап кнопки добавления
 function openPopupAdd() {
@@ -88,7 +90,18 @@ function closePopupAdd() {
     addPopupButton.classList.remove('popup_opened')
 }
 
+function addImgPopup(evt) {
+    const addNewCard = template.cloneNode(true)
+    addNewCard.querySelector('.cards__image').src = linkPlaceAddCard.value
+    addNewCard.querySelector('.cards__title').textContent = namePlaceAddCard.value
+    evt.preventDefault()
+    namePlaceAddCard.value = ''
+    linkPlaceAddCard.src = ''
+    closePopupAdd()
+    cardsElement.prepend(addNewCard)
+}
+
 // вешаем слушатель на попап добавления фото
 addButtonProfile.addEventListener('click', openPopupAdd)
 closePopupButton.addEventListener('click', closePopupAdd)
-//addFormElement.addEventListener('submit', handleAddPopup)
+addFormButton.addEventListener('submit', addImgPopup)
