@@ -88,53 +88,70 @@ function handleEditFormSubmit(evt) { // функция обработки отп
 }
 formElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
 
-// // ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним !!не сделано пока не пропишу массив!!
-// function openAddPopup() { //функция открытия
-//     openPopup(popupAdd)
-// }
-// buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
-//
-// function closeAddPopup() { //функция закрытия
-//     closePopup(popupAdd)
-// }
-// closeAdd.addEventListener('click', closeAddPopup) // слушатель кнопки закрытия попапа добавления новой карточки с местом
-//
-// function f() { //функция создания новой карточки для добавления
-//
-// }
-//
-// function f1() { // функция клона массива для создания новой карточки для добавления
-//
-// }
-//
-// function f2() { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
-//
-// }
-// addFormButton.addEventListener('submit', funk) // слушатель формы инпутов добавления новой карточки
-
-// // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН !!не сделано пока не пропишу массив!!
-// function openFullScreenPopup() {
-//     openPopup(popupFullScreen)
-//     imageFullScreenInput.src = templateCardImage.src
-//     captionFullScreenInput.value = templateCardTitle.textContent
-// }
-
-
 // РАБОТА С ТЕМПЛЕЙТОМ (массив карточек)
-function frameArray() {
-    initialCards.forEach(frameCardsTemplate)
+initialCards.forEach(function(card) {
+    const cards = frameCardsTemplate(card)
+    renderCard(cards)
+});
+function renderCard(cards) {
+    cardsElement.append(cards)
 }
+
+function createNewCard(cardData) { //функция создания новой карточки для добавления
+    const cardAddNew = frameCardsTemplate(cardData)
+    cardsElement.prepend(cardAddNew)
+}
+
 function frameCardsTemplate(card) { // функция клонирования карточек темплейта
     const cardTemplate = template.querySelector('.cards__item').cloneNode(true) // клонировали li и объявили пее в переменную
-    const templateCardImage = template.querySelector('.cards__image')
-    const templateCardTitle = template.querySelector('.cards__title')
+    const templateCardImage = cardTemplate.querySelector('.cards__image') // находим картинку места в темплейте и присваиваем ей переменную
+    const templateCardTitle = cardTemplate.querySelector('.cards__title') // находим наименование места в темплейте и присваиваем ему переменную
     templateCardImage.src = card.link // нашли картинку в темплей и навесили на нее ссылку из массива
     templateCardTitle.textContent = card.name // нашли название места и навесили на него имя из массива
-
-    cardsElement.append(cardTemplate)
+    cardTemplate.querySelector('.cards__trash').addEventListener('click', () => { // корзина
+        cardTemplate.remove()
+    })
+    cardTemplate.querySelector('.cards__like').addEventListener('click', function (evt) { // кнопка лайк
+        evt.target.classList.toggle('cards__like_active')
+    })
+    cardTemplate.querySelector('.cards__image').addEventListener('click', () => { // слушатель на картинку для открытия фото на весь экран
+        openFullScreenPopup (card.link, card.name)
+    })
 }
 
-frameArray()
+
+// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним !!не сделано пока не пропишу массив!!
+function openAddPopup() { //функция открытия
+    openPopup(popupAdd)
+}
+buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
+
+function closeAddPopup() { //функция закрытия
+    closePopup(popupAdd)
+}
+closeAdd.addEventListener('click', closeAddPopup) // слушатель кнопки закрытия попапа добавления новой карточки с местом
+
+function handleAddFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
+    evt.preventDefault();
+    const cardObjNew = {name: titleAddInput.value, link: imageAddInput.value};
+    createNewCard(cardObjNew);
+    titleAddInput.value = ''
+    imageAddInput.value = ''
+    closeAddPopup()
+}
+addFormButton.addEventListener('submit', handleAddFormSubmit) // слушатель формы инпутов добавления новой карточки
+
+// ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
+function openFullScreenPopup(img, caption) { // функция открытия попап "на весь экран"
+    openPopup(popupFullScreen)
+    imageFullScreenInput.src = img
+    captionFullScreenInput.value = caption
+}
+function closeFullScreenPopup() { // функция закрытия попап "на весь экран"
+    closePopup(popupFullScreen)
+}
+closeFullScreen.addEventListener('click', closeFullScreenPopup) // слушатель кнопки закрытия попапа "на весь экран"
+
 
 
 
