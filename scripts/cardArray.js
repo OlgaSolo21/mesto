@@ -76,6 +76,8 @@ function renderCard(element) {
     closeImg.addEventListener('click', () => {
         openCardItem.classList.remove('popup_opened')
     })
+
+    addImgPopup (element.link, element.name)
     // отображаем на странице массив
     cardsElement.append(templateElement)
 }

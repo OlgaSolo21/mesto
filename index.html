@@ -29,9 +29,9 @@
     </footer>
     <div class="popup popup_profile">
         <div class="popup__container">
-            <button type="button" aria-label="Close" class="popup__close cursor"></button>
+            <button type="button" aria-label="Close" class="popup__close popup__close_type_edit cursor"></button>
             <h2 class="popup__title">Редактировать профиль</h2>
-            <form class="popup__form" name="popup-profile">
+            <form class="popup_edit-form" name="popup-profile">
                 <fieldset class="popup__content">
                     <input type="text" name="UserName" value="" class="popup__input popup__input_type_name">
                     <input type="text" name="UserJob" value="" class="popup__input popup__input_type_job">
@@ -42,9 +42,9 @@
     </div>
     <div class="popup popup_add">
         <div class="popup__container">
-            <button type="button" aria-label="Close" class="popup__close cursor popup_button"></button>
+            <button type="button" aria-label="Close" class="popup__close popup__close_type_add cursor"></button>
             <h2 class="popup__title">Новое место</h2>
-            <form class="popup__form add_card" name="popup-profile">
+            <form class="popup_add-form" name="popup-profile">
                 <fieldset class="popup__content">
                     <input type="text" name="UserPlace" value="" class="popup__input popup__input_type_place" placeholder="Название">
                     <input type="text" name="UserLink" value="" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку">
@@ -53,13 +53,13 @@
             </form>
         </div>
     </div>
-    <div class="popup popup_img popup_fullscreen">
-        <div class="open__container">
-            <button type="button" aria-label="Close" class="popup__close cursor popup_close-img"></button>
-            <form class="open_image">
-                <fieldset class="open__container">
-                    <input type="image" src="" alt="фоторяд" class="open__img">
-                    <input type="text" class="open__text">
+    <div class="popup popup_fullscreen">
+        <div class="popup__cards">
+            <button type="button" aria-label="Close" class="popup__close popup__close_type_fullscreen cursor"></button>
+            <form class="popup_fullscreen-form">
+                <fieldset>
+                    <input type="image" src="" alt="фоторяд" class="popup__image">
+                    <input type="text" class="popup__caption">
                 </fieldset>
             </form>
         </div>
@@ -74,7 +74,8 @@
             </div>
         </li>
     </template>
+<!--    <script src="./scripts/arrayCard.js"></script>-->
     <script src="./scripts/cardArray.js"></script>
-    <script src="./scripts/index.js"></script>
+<!--    <script src="./scripts/index.js"></script>-->
 </body>
 </html>

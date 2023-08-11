@@ -1,4 +1,4 @@
-.open__container {
+.popup__cards {
     display: flex;
     flex-direction: column;
     max-width: 75vw;
