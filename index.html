@@ -28,11 +28,11 @@
     <footer class="footer">
         <p class="footer__copyright">© 2020 Mesto Russia</p>
     </footer>
-    <div class="popup popup_profile">
+    <div class="popup" id="edit-profile">
         <div class="popup__container">
             <button type="button" aria-label="Close" class="popup__close popup__close_type_edit cursor"></button>
             <h2 class="popup__title">Редактировать профиль</h2>
-            <form class="popup_edit-form" name="popup-profile">
+            <form class="popup__edit-form" name="popup-profile">
                 <fieldset class="popup__content">
                     <input type="text" name="UserName" value="" class="popup__input popup__input_type_name">
                     <input type="text" name="UserJob" value="" class="popup__input popup__input_type_job">
@@ -41,11 +41,11 @@
             </form>
         </div>
     </div>
-    <div class="popup popup_add">
+    <div class="popup" id="add-card">
         <div class="popup__container">
             <button type="button" aria-label="Close" class="popup__close popup__close_type_add cursor"></button>
             <h2 class="popup__title">Новое место</h2>
-            <form class="popup_add-form" name="popup-profile">
+            <form class="popup__add-form" name="popup-profile">
                 <fieldset class="popup__content">
                     <input type="text" name="UserPlace" value="" class="popup__input popup__input_type_place" placeholder="Название">
                     <input type="text" name="UserLink" value="" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку">
@@ -54,10 +54,10 @@
             </form>
         </div>
     </div>
-    <div class="popup popup_fullscreen">
+    <div class="popup" id="fullscreen-card">
         <div class="popup__cards">
             <button type="button" aria-label="Close" class="popup__close popup__close_type_fullscreen cursor"></button>
-            <form class="popup_fullscreen-form">
+            <form class="popup__fullscreen-form">
                 <fieldset class="popup__cards">
                     <input type="image" src="" alt="фоторяд" class="popup__image">
                     <input type="text" class="popup__caption">
@@ -67,7 +67,7 @@
     </div>
     <template class="cards_template">
         <li class="cards__item">
-            <img class="cards__image cursor" src="" alt="фоторяд">
+            <img class="cards__image cursor" src="." alt="фоторяд">
             <button class="cards__trash cursor"></button>
             <div class="cards__content">
                 <h2 class="cards__title"></h2>

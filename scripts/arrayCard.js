@@ -4,16 +4,16 @@ const cardsElement = document.querySelector('.cards__elements'); // основн
 const buttonEditPopup = document.querySelector('.profile__edit-button') // кнопка карандаш редактирования профиля
 const profileEditTitle = document.querySelector('.profile__title') // строка "имя" профиля
 const profileEditSubtitle = document.querySelector('.profile__subtitle') // строка "о себе" профиля
-const popupEdit = document.querySelector('.popup_profile') // сам попап редактирования профиля
-const formElement = document.querySelector('.popup_edit-form') // форма редактирования профиля (форма с инпутами)
+const popupEdit = document.querySelector('#edit-profile') // сам попап редактирования профиля
+const formElement = document.querySelector('.popup__edit-form') // форма редактирования профиля (форма с инпутами)
 const nameEditInput = formElement.querySelector('.popup__input_type_name') // инпут редактирования имени профиля
 const jobEditInput = formElement.querySelector('.popup__input_type_job') // инпут редактирования "о себе"
 const closeEdit = document.querySelector('.popup__close_type_edit')
 
 // попап добавления новой карточки с местом
 const buttonAddPopup = document.querySelector('.profile__add-button') // кнопка "плюс" добавления новой карточки с местом
-const popupAdd = document.querySelector('.popup_add') // сам попап добавления новой карточки
-const addFormButton = document.querySelector('.popup_add-form') // форма добавления карточки (форма с инпутами)
+const popupAdd = document.querySelector('#add-card') // сам попап добавления новой карточки
+const addFormButton = document.querySelector('.popup__add-form') // форма добавления карточки (форма с инпутами)
 const titleAddInput = addFormButton.querySelector('.popup__input_type_place') // инпут добавления названия места
 const imageAddInput = addFormButton.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
 const closeAdd = document.querySelector('.popup__close_type_add')
@@ -21,7 +21,7 @@ const closeAdd = document.querySelector('.popup__close_type_add')
 const cardNewSave = {name: titleAddInput.value, link: imageAddInput.value};
 
 // попап открытия карточки на весь экран
-const popupFullScreen = document.querySelector('.popup_fullscreen') // сам попап открытия картинки на весь экран
+const popupFullScreen = document.querySelector('#fullscreen-card') // сам попап открытия картинки на весь экран
 const imageFullScreenInput = document.querySelector('.popup__image') // инпут картинки карточки места
 const captionFullScreenInput = document.querySelector('.popup__caption') // инпут подписи места к картинке
 const closeFullScreen = document.querySelector('.popup__close_type_fullscreen')
