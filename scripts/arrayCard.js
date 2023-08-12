@@ -1,4 +1,4 @@
-const cardsElement = document.querySelector('.cards__elements');
+const cardsElement = document.querySelector('.cards__elements'); // основная константа для темплейта (ul)
 
 // попап редактирования профиля
 const buttonEditPopup = document.querySelector('.profile__edit-button') // кнопка карандаш редактирования профиля
@@ -17,6 +17,8 @@ const addFormButton = document.querySelector('.popup_add-form') // форма д
 const titleAddInput = addFormButton.querySelector('.popup__input_type_place') // инпут добавления названия места
 const imageAddInput = addFormButton.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
 const closeAdd = document.querySelector('.popup__close_type_add')
+    // передаем в объект значения инпутов для добавления карточки
+const cardNewSave = {name: titleAddInput.value, link: imageAddInput.value};
 
 // попап открытия карточки на весь экран
 const popupFullScreen = document.querySelector('.popup_fullscreen') // сам попап открытия картинки на весь экран
@@ -61,8 +63,8 @@ function handleEditFormSubmit(evt) { // функция обработки отп
 formElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
 
 // РАБОТА С ТЕМПЛЕЙТОМ (массив карточек)
-initialCards.forEach(function(card) {
-    const cards = frameCardsTemplate(card)
+initialCards.forEach(function(card) { // перебираем 6 карточек массива и рендерим их на страницу
+    const cards = frameCardsTemplate(card) // константа для append
     cardsElement.append(cards)
 });
 
@@ -84,8 +86,7 @@ function frameCardsTemplate(card) { // функция клонирования �
     return cardTemplate
 }
 
-
-// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним !!не сделано пока не пропишу массив!!
+// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним
 function openAddPopup() { //функция открытия
     openPopup(popupAdd)
 }
@@ -103,9 +104,8 @@ function createNewCard(cardNew) { //функция создания новой �
 
 function handleAddFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
     evt.preventDefault();
-    const cardNewSave = {name: titleAddInput.value, link: imageAddInput.value};
-    createNewCard(cardNewSave);
-    titleAddInput.value = ''
+    createNewCard(cardNewSave); // переменная - cardNewSave со значениями инпутов (объект)
+    titleAddInput.value = '' // стираем данные для след карточки
     imageAddInput.value = ''
     closeAddPopup()
 }
