@@ -32,11 +32,9 @@
         <div class="popup__container">
             <button type="button" aria-label="Close" class="popup__close popup__close_type_edit cursor"></button>
             <h2 class="popup__title">Редактировать профиль</h2>
-            <form class="popup__edit-form" name="popup-profile">
-                <fieldset class="popup__content">
-                    <input type="text" name="UserName" value="" class="popup__input popup__input_type_name">
-                    <input type="text" name="UserJob" value="" class="popup__input popup__input_type_job">
-                </fieldset>
+            <form class="popup__edit-form popup__content" name="popup-profile">
+                <input type="text" name="UserName" value="" class="popup__input popup__input_type_name">
+                <input type="text" name="UserJob" value="" class="popup__input popup__input_type_job">
                 <button type="submit" class="popup__submit">Сохранить</button>
             </form>
         </div>
@@ -45,29 +43,25 @@
         <div class="popup__container">
             <button type="button" aria-label="Close" class="popup__close popup__close_type_add cursor"></button>
             <h2 class="popup__title">Новое место</h2>
-            <form class="popup__add-form" name="popup-profile">
-                <fieldset class="popup__content">
-                    <input type="text" name="UserPlace" value="" class="popup__input popup__input_type_place" placeholder="Название">
-                    <input type="text" name="UserLink" value="" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку">
-                </fieldset>
+            <form class="popup__add-form popup__content" name="popup-profile">
+                <input type="text" name="UserPlace" value="" class="popup__input popup__input_type_place" placeholder="Название">
+                <input type="text" name="UserLink" value="" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку">
                 <button type="submit" class="popup__submit">Создать</button>
             </form>
         </div>
     </div>
-    <div class="popup" id="fullscreen-card">
+    <div class="popup popup_fullscreen" id="fullscreen-card">
         <div class="popup__cards">
             <button type="button" aria-label="Close" class="popup__close popup__close_type_fullscreen cursor"></button>
-            <form class="popup__fullscreen-form">
-                <fieldset class="popup__cards">
-                    <input type="image" src="" alt="фоторяд" class="popup__image">
-                    <input type="text" class="popup__caption">
-                </fieldset>
-            </form>
+            <figure class="popup__cards">
+                <img src="" alt="" class="popup__image">
+                <figcaption class="popup__caption"></figcaption>
+            </figure>
         </div>
     </div>
     <template class="cards_template">
         <li class="cards__item">
-            <img class="cards__image cursor" src="." alt="фоторяд">
+            <img class="cards__image cursor" src="." alt="">
             <button class="cards__trash cursor"></button>
             <div class="cards__content">
                 <h2 class="cards__title"></h2>
@@ -75,7 +69,7 @@
             </div>
         </li>
     </template>
-    <script src="./scripts/initialCards.js"></script>
-    <script src="./scripts/arrayCard.js"></script>
+    <script src="scripts/initialCards.js"></script>
+    <script src="scripts/index.js"></script>
 </body>
 </html>

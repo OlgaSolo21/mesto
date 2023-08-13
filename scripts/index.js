@@ -5,62 +5,61 @@ const buttonEditPopup = document.querySelector('.profile__edit-button') // кн�
 const profileEditTitle = document.querySelector('.profile__title') // строка "имя" профиля
 const profileEditSubtitle = document.querySelector('.profile__subtitle') // строка "о себе" профиля
 const popupEdit = document.querySelector('#edit-profile') // сам попап редактирования профиля
-const formElement = document.querySelector('.popup__edit-form') // форма редактирования профиля (форма с инпутами)
-const nameEditInput = formElement.querySelector('.popup__input_type_name') // инпут редактирования имени профиля
-const jobEditInput = formElement.querySelector('.popup__input_type_job') // инпут редактирования "о себе"
-const closeEdit = document.querySelector('.popup__close_type_edit')
+const formEditElement = document.querySelector('.popup__edit-form') // форма редактирования профиля (форма с инпутами)
+const nameEditInput = formEditElement.querySelector('.popup__input_type_name') // инпут редактирования имени профиля
+const jobEditInput = formEditElement.querySelector('.popup__input_type_job') // инпут редактирования "о себе"
 
 // попап добавления новой карточки с местом
 const buttonAddPopup = document.querySelector('.profile__add-button') // кнопка "плюс" добавления новой карточки с местом
 const popupAdd = document.querySelector('#add-card') // сам попап добавления новой карточки
-const addFormButton = document.querySelector('.popup__add-form') // форма добавления карточки (форма с инпутами)
-const titleAddInput = addFormButton.querySelector('.popup__input_type_place') // инпут добавления названия места
-const imageAddInput = addFormButton.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
-const closeAdd = document.querySelector('.popup__close_type_add')
-    // передаем в объект значения инпутов для добавления карточки
-const cardNewSave = {name: titleAddInput.value, link: imageAddInput.value};
+const formAddForm = document.querySelector('.popup__add-form') // форма добавления карточки (форма с инпутами)
+const titleAddInput = formAddForm.querySelector('.popup__input_type_place') // инпут добавления названия места
+const imageAddInput = formAddForm.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
 
 // попап открытия карточки на весь экран
 const popupFullScreen = document.querySelector('#fullscreen-card') // сам попап открытия картинки на весь экран
-const imageFullScreenInput = document.querySelector('.popup__image') // инпут картинки карточки места
-const captionFullScreenInput = document.querySelector('.popup__caption') // инпут подписи места к картинке
-const closeFullScreen = document.querySelector('.popup__close_type_fullscreen')
+const imageFullScreenInput = popupFullScreen.querySelector('.popup__image') // инпут картинки карточки места
+const captionFullScreenInput = popupFullScreen.querySelector('.popup__caption') // инпут подписи места к картинке
 
 // константы темплейта
 const template = document.querySelector('.cards_template').content // находим весь темплейт и получаем доступ к его контенту
 
 // универсальная функция открытия попапов
 // в функцию передали параметр попап, далее в уникальных ф-ях вместо popup будем ставить константы каждого попапа
-function openPopup(popup) {
+function openAllPopup(popup) {
     popup.classList.add('popup_opened')
 }
 
-// универсальная функция закрытия попапов
-// в функцию передали параметр попап, далее в уникальных ф-ях вместо popup будем ставить константы каждого попапа
-function closePopup(popup) {
-    popup.classList.remove('popup_opened')
+// универсальная функция закрытия попапов (по рекомендации от ревью - ставим закрытие всех попапов на крестик через цикл)
+    // Кнопка находится внутри попапа, т.е. попап является родителем этой кнопки.
+    // У попапа есть универсальный класс "popup", значит нам нужен родитель кнопки с классом "popup"
+    // Для этого есть специальный метод .closest()
+function closeAllPopup(buttonsPopup) {
+    buttonsPopup.classList.remove('popup_opened')
 }
+document.querySelectorAll('.popup__close').forEach(button => {
+    const buttonsPopup = button.closest('.popup'); // нашли родителя с нужным классом, используем метод closest
+    button.addEventListener('click', () => closeAllPopup(buttonsPopup)); // закрыли попап
+});
 
 // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ: вся работа с ним
 function openEditPopup() { //функция открытия
     nameEditInput.value = profileEditTitle.textContent
     jobEditInput.value = profileEditSubtitle.textContent
-    openPopup(popupEdit)
+    openAllPopup(popupEdit)
 }
 buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
 
 function closeEditPopup() { //функция закрытия
-    closePopup(popupEdit)
+    closeAllPopup(popupEdit)
 }
-closeEdit.addEventListener('click', closeEditPopup) // слушатель кнопки закрытия попапа редактирования профиля
-
 function handleEditFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
     evt.preventDefault()
     profileEditTitle.textContent = nameEditInput.value
     profileEditSubtitle.textContent = jobEditInput.value
     closeEditPopup()
 }
-formElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
+formEditElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
 
 // РАБОТА С ТЕМПЛЕЙТОМ (массив карточек)
 initialCards.forEach(function(card) { // перебираем 6 карточек массива и рендерим их на страницу
@@ -73,6 +72,7 @@ function frameCardsTemplate(card) { // функция клонирования �
     const templateCardImage = cardTemplate.querySelector('.cards__image') // находим картинку места в темплейте и присваиваем ей переменную
     const templateCardTitle = cardTemplate.querySelector('.cards__title') // находим наименование места в темплейте и присваиваем ему переменную
     templateCardImage.src = card.link // нашли картинку в темплей и навесили на нее ссылку из массива
+    templateCardImage.alt = card.name // нашли алт для изображений (см закладку со статьей от ревью)
     templateCardTitle.textContent = card.name // нашли название места и навесили на него имя из массива
     cardTemplate.querySelector('.cards__trash').addEventListener('click', () => { // корзина
         cardTemplate.remove()
@@ -81,43 +81,41 @@ function frameCardsTemplate(card) { // функция клонирования �
         evt.target.classList.toggle('cards__like_active')
     })
     cardTemplate.querySelector('.cards__image').addEventListener('click', () => { // слушатель на картинку для открытия фото на весь экран
-        openFullScreenPopup (card.link, card.name)
+        openFullScreenPopup (card.link, card.name) // комментарий ревью - подумать как реализовать (не получилось)
+        // "Можно передавать в функцию объект с данными, так-же как вы их приняли в функцию создания карточки, будет здорово."
     })
     return cardTemplate
 }
 
 // ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним
 function openAddPopup() { //функция открытия
-    openPopup(popupAdd)
+    openAllPopup(popupAdd)
 }
 buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
 
 function closeAddPopup() { //функция закрытия
-    closePopup(popupAdd)
+    closeAllPopup(popupAdd)
 }
-closeAdd.addEventListener('click', closeAddPopup) // слушатель кнопки закрытия попапа добавления новой карточки с местом
 
 function createNewCard(cardNew) { //функция создания новой карточки для добавления
     const cardAddNew = frameCardsTemplate(cardNew)
     cardsElement.prepend(cardAddNew)
 }
 
-function handleAddFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
+function handleFormAddSubmit(evt) { // функция обработки отправки формы добавления карточки и отмена стандартной отправки на сервер
     evt.preventDefault();
+    const cardNewSave = {name: titleAddInput.value, link: imageAddInput.value};
     createNewCard(cardNewSave); // переменная - cardNewSave со значениями инпутов (объект)
     titleAddInput.value = '' // стираем данные для след карточки
     imageAddInput.value = ''
     closeAddPopup()
 }
-addFormButton.addEventListener('submit', handleAddFormSubmit) // слушатель формы инпутов добавления новой карточки
+formAddForm.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
 
 // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
 function openFullScreenPopup(img, caption) { // функция открытия попап "на весь экран"
-    openPopup(popupFullScreen)
+    openAllPopup(popupFullScreen)
     imageFullScreenInput.src = img
-    captionFullScreenInput.value = caption
+    captionFullScreenInput.textContent = caption
+    imageFullScreenInput.alt = caption // нашли алт для изображений (см закладку со статьей от ревью)
 }
-function closeFullScreenPopup() { // функция закрытия попап "на весь экран"
-    closePopup(popupFullScreen)
-}
-closeFullScreen.addEventListener('click', closeFullScreenPopup) // слушатель кнопки закрытия попапа "на весь экран"

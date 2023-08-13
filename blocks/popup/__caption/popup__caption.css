@@ -3,7 +3,6 @@
     color: #ffffff;
     font-size: 12px;
     font-weight: 400;
-    line-height: 15px;
-    background-color: transparent;
+    line-height: normal;
     border: none;
 }
