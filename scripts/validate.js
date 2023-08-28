@@ -4,7 +4,6 @@ const configForm = { // классы формы для удобства
     submitButtonSelector: '.popup__submit',
     inactiveButtonClass: 'popup__submit_disabled', // класс неактивной кнопки
     inputErrorClass: 'popup__input_type_error', // класс невалидного поля
-    //errorClass: 'popup__error_visible' // класс стиля текста ошибки
 };
 
 function showErrorInput(inputItem, errorSpanText, config){ // функция показать ошибку при невалидном поле
@@ -34,10 +33,10 @@ function hasInvalidInput(inputsList) { // функция проверки вал
     })
 }
 
-function toggleButtonState (inputsList, submitButtonPopup, config){ // вункция переключения состояния кнопки если не/валидна
+function toggleButtonState (inputsList, submitButtonPopup, config){ // функция переключения состояния кнопки если не/валидна
     if (hasInvalidInput(inputsList)) { // если поле невалидно
         submitButtonPopup.classList.add(config.inactiveButtonClass)
-        submitButtonPopup.disabled = 'true'
+        submitButtonPopup.disabled = 'invalid'
     }else { // иначе если валидно
         submitButtonPopup.classList.remove(config.inactiveButtonClass)
         submitButtonPopup.disabled = false
@@ -49,12 +48,13 @@ function setEventListener(formItem, config) { // функция установк
     // console.log(inputsList)
     inputsList.forEach(function (inputItem) { // перебираем каждый инпут и вешаем обработчик и событие ввод
         inputItem.addEventListener('input', ()=>{ // событие ввода и фукнция проверки поля на валидность
+            toggleButtonState (inputsList, submitButtonPopup, config)
             checkInputValidity(inputItem, formItem, config)
         })
     })
 
     const submitButtonPopup = formItem.querySelector(config.submitButtonSelector) // находим кнопки "сохранить"
-
+    toggleButtonState (inputsList, submitButtonPopup, config)
 
     formItem.addEventListener('submit', function (evt){ // обработчик на кнопку и отмена стандартной отправки
         evt.preventDefault()

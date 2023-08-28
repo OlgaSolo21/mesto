@@ -15,6 +15,7 @@ const popupAdd = document.querySelector('#add-card') // сам попап доб
 const formAddForm = document.querySelector('.popup__add-form') // форма добавления карточки (форма с инпутами)
 const titleAddInput = formAddForm.querySelector('.popup__input_type_place') // инпут добавления названия места
 const imageAddInput = formAddForm.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
+const buttonSubmit = formAddForm.querySelector('.popup__submit') // кнопка "создать" в форме
 
 // попап открытия карточки на весь экран
 const popupFullScreen = document.querySelector('#fullscreen-card') // сам попап открытия картинки на весь экран
@@ -109,7 +110,9 @@ function handleFormAddSubmit(evt) { // функция обработки отп�
     titleAddInput.value = '' // стираем данные для след карточки
     imageAddInput.value = ''
     closeAddPopup()
+    buttonSubmit.classList.add('popup__submit_disabled')
 }
+
 formAddForm.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
 
 // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
