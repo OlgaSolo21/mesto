@@ -81,7 +81,7 @@ function frameCardsTemplate(card) { // функция клонирования �
         evt.target.classList.toggle('cards__like_active')
     })
     cardTemplate.querySelector('.cards__image').addEventListener('click', () => { // слушатель на картинку для открытия фото на весь экран
-        openFullScreenPopup (card.link, card.name) // комментарий ревью - подумать как реализовать (не получилось)
+        openFullScreenPopup (card) // комментарий ревью - подумать как реализовать (done)
         // "Можно передавать в функцию объект с данными, так-же как вы их приняли в функцию создания карточки, будет здорово."
     })
     return cardTemplate
@@ -113,9 +113,9 @@ function handleFormAddSubmit(evt) { // функция обработки отп�
 formAddForm.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
 
 // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
-function openFullScreenPopup(img, caption) { // функция открытия попап "на весь экран"
+function openFullScreenPopup(card) { // функция открытия попап "на весь экран"
     openAllPopup(popupFullScreen)
-    imageFullScreenInput.src = img
-    captionFullScreenInput.textContent = caption
-    imageFullScreenInput.alt = caption // нашли алт для изображений (см закладку со статьей от ревью)
+    imageFullScreenInput.src = card.link
+    captionFullScreenInput.textContent = card.name
+    imageFullScreenInput.alt = card.name // нашли алт для изображений (см закладку со статьей от ревью)
 }

@@ -34,9 +34,9 @@
             <h2 class="popup__title">Редактировать профиль</h2>
             <form class="popup__edit-form popup__content" name="popup-profile" novalidate>
                 <input type="text" name="UserName" value="" class="popup__input popup__input_type_name" minlength="2" maxlength="40" required>
-                <span class="popup__error_visible"></span>
+                <span id="UserName-error" class="popup__span-error"></span>
                 <input type="text" name="UserJob" value="" class="popup__input popup__input_type_job" minlength="2" maxlength="200" required>
-                <span class="popup__error_visible"></span>
+                <span id="UserJob-error" class="popup__span-error"></span>
                 <button type="submit" class="popup__submit">Сохранить</button>
             </form>
         </div>
@@ -47,9 +47,9 @@
             <h2 class="popup__title">Новое место</h2>
             <form class="popup__add-form popup__content" name="popup-profile" novalidate>
                 <input type="text" name="UserPlace" value="" class="popup__input popup__input_type_place" placeholder="Название" minlength="2" maxlength="30" required>
-                <span class="popup__error_visible"></span>
+                <span id="UserPlace-error" class="popup__span-error"></span>
                 <input type="url" name="UserLink" value="" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку" required>
-                <span class="popup__error_visible"></span>
+                <span id="UserLink-error" class="popup__span-error"></span>
                 <button type="submit" class="popup__submit">Создать</button>
             </form>
         </div>
