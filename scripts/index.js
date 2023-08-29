@@ -29,19 +29,35 @@ const template = document.querySelector('.cards_template').content // наход
 // в функцию передали параметр попап, далее в уникальных ф-ях вместо popup будем ставить константы каждого попапа
 function openAllPopup(popup) {
     popup.classList.add('popup_opened')
+    popup.addEventListener('click', closeOverlayPopup)
+    document.addEventListener('keydown', closeEscPopup)
 }
 
 // универсальная функция закрытия попапов (по рекомендации от ревью - ставим закрытие всех попапов на крестик через цикл)
-    // Кнопка находится внутри попапа, т.е. попап является родителем этой кнопки.
-    // У попапа есть универсальный класс "popup", значит нам нужен родитель кнопки с классом "popup"
-    // Для этого есть специальный метод .closest()
-function closeAllPopup(buttonsPopup) {
-    buttonsPopup.classList.remove('popup_opened')
+function closeAllPopup(popup) {
+    popup.classList.remove('popup_opened')
+    popup.removeEventListener('click', closeOverlayPopup)
+    document.removeEventListener('keydown', closeEscPopup)
 }
 document.querySelectorAll('.popup__close').forEach(button => {
-    const buttonsPopup = button.closest('.popup'); // нашли родителя с нужным классом, используем метод closest
-    button.addEventListener('click', () => closeAllPopup(buttonsPopup)); // закрыли попап
+    const popup = button.closest('.popup'); // нашли родителя с нужным классом, используем метод closest
+    button.addEventListener('click', () => closeAllPopup(popup)); // закрыли попап
 });
+
+// функция закрытия попапов на оверлей
+function closeOverlayPopup(evt) {
+    if (evt.target === evt.currentTarget) {
+    closeAllPopup(evt.target)
+    }
+}
+
+// функция закрытия попапов на esc
+function closeEscPopup(evt) {
+    if (evt.key === 'Escape') {
+        const popupOpened = document.querySelector('.popup_opened')
+        closeAllPopup(popupOpened)
+    }
+}
 
 // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ: вся работа с ним
 function openEditPopup() { //функция открытия
