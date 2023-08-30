@@ -15,7 +15,7 @@ const popupAdd = document.querySelector('#add-card') // сам попап доб
 const formAddForm = document.querySelector('.popup__add-form') // форма добавления карточки (форма с инпутами)
 const titleAddInput = formAddForm.querySelector('.popup__input_type_place') // инпут добавления названия места
 const imageAddInput = formAddForm.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
-const buttonSubmit = formAddForm.querySelector('.popup__submit') // кнопка "создать" в форме
+const buttonAddSubmit = formAddForm.querySelector('.popup__submit') // кнопка "создать" в форме
 
 // попап открытия карточки на весь экран
 const popupFullScreen = document.querySelector('#fullscreen-card') // сам попап открытия картинки на весь экран
@@ -27,27 +27,31 @@ const template = document.querySelector('.cards_template').content // наход
 
 // универсальная функция открытия попапов
 // в функцию передали параметр попап, далее в уникальных ф-ях вместо popup будем ставить константы каждого попапа
-function openAllPopup(popup) {
+function openPopup(popup) {
     popup.classList.add('popup_opened')
-    popup.addEventListener('click', closeOverlayPopup)
     document.addEventListener('keydown', closeEscPopup)
 }
 
-// универсальная функция закрытия попапов (по рекомендации от ревью - ставим закрытие всех попапов на крестик через цикл)
-function closeAllPopup(popup) {
+// универсальная функция закрытия попапов (по рекомендации от ревью - ставим закрытие всех попапов на крестик через цикл - исправлено)
+function closePopup(popup) {
     popup.classList.remove('popup_opened')
-    popup.removeEventListener('click', closeOverlayPopup)
     document.removeEventListener('keydown', closeEscPopup)
 }
-document.querySelectorAll('.popup__close').forEach(button => {
-    const popup = button.closest('.popup'); // нашли родителя с нужным классом, используем метод closest
-    button.addEventListener('click', () => closeAllPopup(popup)); // закрыли попап
-});
+// закоммичено - из пр5 2й вариант поиска крестиков (подробнее в ревью 6пр рекомендации)
+// document.querySelectorAll('.popup__close').forEach(button => {
+//     const popup = button.closest('.popup'); // нашли родителя с нужным классом, используем метод closest
+//     button.addEventListener('click', () => closePopup(popup)); // закрыли попап
+// });
 
-// функция закрытия попапов на оверлей
-function closeOverlayPopup(evt) {
-    if (evt.target === evt.currentTarget) {
-    closeAllPopup(evt.target)
+// функция закрытия попапов на оверлей и по крестику (рекомендация ревью)
+const popups = Array.from(document.querySelectorAll('.popup')) // из комментариев ревью - ищем все попапы
+popups.forEach((popup) => { // исп цикл устанавливаем слушатель на все попапы в глобальной зоне видимости (подробнее в уомментах ревью)
+    popup.addEventListener('click', closeByClickPopup)
+})
+
+function closeByClickPopup(evt) { // поиск крестиков (найти статьи изучить!) - вариант от ревью
+    if (evt.target === evt.currentTarget || evt.target.classList.contains('popup__close')) {
+        closePopup(evt.currentTarget)
     }
 }
 
@@ -55,7 +59,7 @@ function closeOverlayPopup(evt) {
 function closeEscPopup(evt) {
     if (evt.key === 'Escape') {
         const popupOpened = document.querySelector('.popup_opened')
-        closeAllPopup(popupOpened)
+        closePopup(popupOpened)
     }
 }
 
@@ -63,12 +67,12 @@ function closeEscPopup(evt) {
 function openEditPopup() { //функция открытия
     nameEditInput.value = profileEditTitle.textContent
     jobEditInput.value = profileEditSubtitle.textContent
-    openAllPopup(popupEdit)
+    openPopup(popupEdit)
 }
 buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
 
 function closeEditPopup() { //функция закрытия
-    closeAllPopup(popupEdit)
+    closePopup(popupEdit)
 }
 function handleEditFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
     evt.preventDefault()
@@ -80,11 +84,11 @@ formEditElement.addEventListener('submit', handleEditFormSubmit) // слушат
 
 // РАБОТА С ТЕМПЛЕЙТОМ (массив карточек)
 initialCards.forEach(function(card) { // перебираем 6 карточек массива и рендерим их на страницу
-    const cards = frameCardsTemplate(card) // константа для append
+    const cards = createCardsTemplate(card) // константа для append
     cardsElement.append(cards)
 });
 
-function frameCardsTemplate(card) { // функция клонирования карточек темплейта
+function createCardsTemplate(card) { // функция клонирования карточек темплейта
     const cardTemplate = template.querySelector('.cards__item').cloneNode(true) // клонировали li и объявили пее в переменную
     const templateCardImage = cardTemplate.querySelector('.cards__image') // находим картинку места в темплейте и присваиваем ей переменную
     const templateCardTitle = cardTemplate.querySelector('.cards__title') // находим наименование места в темплейте и присваиваем ему переменную
@@ -94,28 +98,30 @@ function frameCardsTemplate(card) { // функция клонирования �
     cardTemplate.querySelector('.cards__trash').addEventListener('click', () => { // корзина
         cardTemplate.remove()
     })
-    cardTemplate.querySelector('.cards__like').addEventListener('click', function (evt) { // кнопка лайк
-        evt.target.classList.toggle('cards__like_active')
-    })
+    cardTemplate.querySelector('.cards__like').addEventListener('click', likeCardItem) // лайк карточки
     cardTemplate.querySelector('.cards__image').addEventListener('click', () => { // слушатель на картинку для открытия фото на весь экран
-        openFullScreenPopup (card) // комментарий ревью - подумать как реализовать (done)
-        // "Можно передавать в функцию объект с данными, так-же как вы их приняли в функцию создания карточки, будет здорово."
+        openFullScreenPopup(card) // комментарий ревью 5 пр
     })
     return cardTemplate
 }
 
+// функция лайка карточки (по рекомендации ревью улучшить)
+function likeCardItem(evt) {
+    evt.target.classList.toggle('cards__like_active')
+}
+
 // ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним
 function openAddPopup() { //функция открытия
-    openAllPopup(popupAdd)
+    openPopup(popupAdd)
 }
 buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
 
 function closeAddPopup() { //функция закрытия
-    closeAllPopup(popupAdd)
+    closePopup(popupAdd)
 }
 
 function createNewCard(cardNew) { //функция создания новой карточки для добавления
-    const cardAddNew = frameCardsTemplate(cardNew)
+    const cardAddNew = createCardsTemplate(cardNew)
     cardsElement.prepend(cardAddNew)
 }
 
@@ -123,17 +129,19 @@ function handleFormAddSubmit(evt) { // функция обработки отп�
     evt.preventDefault();
     const cardNewSave = {name: titleAddInput.value, link: imageAddInput.value};
     createNewCard(cardNewSave); // переменная - cardNewSave со значениями инпутов (объект)
-    titleAddInput.value = '' // стираем данные для след карточки
-    imageAddInput.value = ''
+    // titleAddInput.value = '' // стираем данные для след карточки - 2й вариант очистки полей
+    // imageAddInput.value = ''
     closeAddPopup()
-    buttonSubmit.classList.add('popup__submit_disabled')
+    evt.target.reset() //  рекомендация ревью 6пр - очистить форму исп меньше кода (метод reset)
+    buttonAddSubmit.classList.add('popup__submit_disabled')
+    buttonAddSubmit.disabled = true
 }
 
 formAddForm.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
 
 // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
 function openFullScreenPopup(card) { // функция открытия попап "на весь экран"
-    openAllPopup(popupFullScreen)
+    openPopup(popupFullScreen)
     imageFullScreenInput.src = card.link
     captionFullScreenInput.textContent = card.name
     imageFullScreenInput.alt = card.name // нашли алт для изображений (см закладку со статьей от ревью)

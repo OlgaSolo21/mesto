@@ -1,11 +1,3 @@
-const configForm = { // классы формы для удобства
-    formSelector: '.popup__content',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__submit',
-    inactiveButtonClass: 'popup__submit_disabled', // класс неактивной кнопки
-    inputErrorClass: 'popup__input_type_error', // класс невалидного поля
-};
-
 function showErrorInput(inputItem, errorSpanText, config){ // функция показать ошибку при невалидном поле
     errorSpanText.textContent = inputItem.validationMessage // переменная спан ошибки принимает свойство текста ошибки (из вебинара)
     inputItem.classList.add(config.inputErrorClass) // при показе текста добавляем класс со стилем ошибки
@@ -18,7 +10,6 @@ function hideErrorInput(inputItem, errorSpanText, config){ // функция с�
 
 function checkInputValidity(inputItem, formItem, config) { // функция проверки полей на валидность
     const errorSpanText = formItem.querySelector(`#${inputItem.name}-error`) // создаем переменную и находим все спаны (текст ошибки)
-    // console.log(errorSpanText)
     if (!inputItem.validity.valid) { // если инпут поле не валидно вызвать функцию ошибки
         showErrorInput(inputItem, errorSpanText, config)
     }else { // иначе если поле валидно скрывать ошибку
@@ -37,15 +28,14 @@ function toggleButtonState (inputsList, submitButtonPopup, config){ // функ�
     if (hasInvalidInput(inputsList)) { // если поле невалидно
         submitButtonPopup.classList.add(config.inactiveButtonClass)
         submitButtonPopup.disabled = 'invalid'
-    }else { // иначе если валидно
-        submitButtonPopup.classList.remove(config.inactiveButtonClass)
+    } else { // иначе если валидно
+        submitButtonPopup.classList.remove(config.inactiveButtonClass) // из ревью - можно создать функцию в validate - !продумать реализацию!
         submitButtonPopup.disabled = false
     }
 }
 
 function setEventListener(formItem, config) { // функция установки слушателей событий
     const inputsList = Array.from(formItem.querySelectorAll(config.inputSelector)) // находим инпуты в формах
-    // console.log(inputsList)
     inputsList.forEach(function (inputItem) { // перебираем каждый инпут и вешаем обработчик и событие ввод
         inputItem.addEventListener('input', ()=>{ // событие ввода и фукнция проверки поля на валидность
             toggleButtonState (inputsList, submitButtonPopup, config)
@@ -58,13 +48,11 @@ function setEventListener(formItem, config) { // функция установк
 
     formItem.addEventListener('submit', function (evt){ // обработчик на кнопку и отмена стандартной отправки
         evt.preventDefault()
-        // console.log('submit')
     })
 }
 
 function enableValidation(config) { // функция включения валидации всех форм
     const formList = Array.from(document.querySelectorAll(config.formSelector)) // находим в конст все формы на странице (делаем массивом сразу)
-    // console.log(formList)
     formList.forEach(function (formItem) { // перебираем каждую форму и функция установки слушателей
         setEventListener(formItem, config)
     })
