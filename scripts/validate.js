@@ -24,12 +24,16 @@ function hasInvalidInput(inputsList) { // функция проверки вал
     })
 }
 
+function checkInvalidButton(submitButtonPopup, config) { // функция проверки валидности кнопки при добавлении2й карточки(для index.js)
+    submitButtonPopup.classList.add(config.inactiveButtonClass)
+    submitButtonPopup.disabled = 'invalid'
+}
+
 function toggleButtonState (inputsList, submitButtonPopup, config){ // функция переключения состояния кнопки если не/валидна
     if (hasInvalidInput(inputsList)) { // если поле невалидно
-        submitButtonPopup.classList.add(config.inactiveButtonClass)
-        submitButtonPopup.disabled = 'invalid'
+        checkInvalidButton(submitButtonPopup, config)
     } else { // иначе если валидно
-        submitButtonPopup.classList.remove(config.inactiveButtonClass) // из ревью - можно создать функцию в validate - !продумать реализацию!
+        submitButtonPopup.classList.remove(config.inactiveButtonClass) // из ревью - можно создать функцию в validate - продумать реализацию!
         submitButtonPopup.disabled = false
     }
 }

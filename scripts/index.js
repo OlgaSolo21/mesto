@@ -133,8 +133,7 @@ function handleFormAddSubmit(evt) { // функция обработки отп�
     // imageAddInput.value = ''
     closeAddPopup()
     evt.target.reset() //  рекомендация ревью 6пр - очистить форму исп меньше кода (метод reset)
-    buttonAddSubmit.classList.add('popup__submit_disabled')
-    buttonAddSubmit.disabled = true
+    checkInvalidButton(buttonAddSubmit, configForm)
 }
 
 formAddForm.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
