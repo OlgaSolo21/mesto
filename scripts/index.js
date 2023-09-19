@@ -1,10 +1,12 @@
 // импорты модулей
 import Card from './Card.js'
 import FormValidator from './FormValidator.js'
-
+import {initialCards} from './initialCards.js'
 
 // основная константа для темплейта (ul)
 const cardsElement = document.querySelector('.cards__elements');
+// основная константа всех форм
+const forms = document.querySelectorAll('.popup__content')
 // попап редактирования профиля
 const buttonEditPopup = document.querySelector('.profile__edit-button') // кнопка карандаш редактирования профиля
 const profileEditTitle = document.querySelector('.profile__title') // строка "имя" профиля
@@ -16,10 +18,9 @@ const jobEditInput = formEditElement.querySelector('.popup__input_type_job') // 
 // попап добавления новой карточки с местом
 const buttonAddPopup = document.querySelector('.profile__add-button') // кнопка "плюс" добавления новой карточки с местом
 const popupAdd = document.querySelector('#add-card') // сам попап добавления новой карточки
-const formAddForm = document.querySelector('.popup__add-form') // форма добавления карточки (форма с инпутами)
-const titleAddInput = formAddForm.querySelector('.popup__input_type_place') // инпут добавления названия места
-const imageAddInput = formAddForm.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
-const buttonAddSubmit = formAddForm.querySelector('.popup__submit') // кнопка "создать" в форме
+const formAddInput = document.querySelector('.popup__add-form') // форма добавления карточки (форма с инпутами)
+const titleAddInput = formAddInput.querySelector('.popup__input_type_place') // инпут добавления названия места
+const imageAddInput = formAddInput.querySelector('.popup__input_type_link') // инпут добавления ссылки на картинку места
 // попап открытия карточки на весь экран
 const popupFullScreen = document.querySelector('#fullscreen-card') // сам попап открытия картинки на весь экран
 const imageFullScreenInput = popupFullScreen.querySelector('.popup__image') // инпут картинки карточки места
@@ -126,8 +127,19 @@ function handleFormAddSubmit(evt) { // функция обработки отп�
     // titleAddInput.value = '' // стираем данные для след карточки - 2й вариант очистки полей
     // imageAddInput.value = ''
     closeAddPopup()
-    evt.target.reset() //  рекомендация ревью 6пр - очистить форму исп меньше кода (метод reset)
-    checkInvalidButton(buttonAddSubmit, configForm)
+    formAddInput.reset() //  рекомендация ревью 6пр - очистить форму исп меньше кода (метод reset)
 }
 
-formAddForm.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
+formAddInput.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
+
+const configForm = { // конфиг формы для удобства
+    formSelector: '.popup__content',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__submit',
+    inactiveButtonClass: 'popup__submit_disabled', // класс неактивной кнопки
+    inputErrorClass: 'popup__input_type_error', // класс невалидного поля
+};
+forms.forEach((formElement) => {
+    const formValidator = new FormValidator(configForm, formElement)
+    formValidator.enableValidation()
+})

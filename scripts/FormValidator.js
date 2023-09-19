@@ -2,6 +2,8 @@ export default class FormValidator {
     constructor(config, formElement) {
         this._config = config
         this._formElement = formElement
+        this._submitButtonPopup = this._formElement.querySelector(this._config.submitButtonSelector)
+        this._inputList = Array.from(this._formElement.querySelectorAll(this._config.inputSelector))
     }
 
     _showErrorInput(inputItem, errorSpanText) { // функция показать ошибку при невалидном поле
@@ -9,72 +11,59 @@ export default class FormValidator {
         inputItem.classList.add(this._config.inputErrorClass) // при показе текста добавляем класс со стилем ошибки
     }
 
-    _hideErrorInput(inputItem, errorSpanText, config) { // функция скрыть ошибку при невалидном поле
-        errorSpanText.textContent = inputItem.validationMessage
+    _hideErrorInput(inputItem, errorSpanText) { // функция скрыть ошибку при невалидном поле
+        errorSpanText.textContent = ''
         inputItem.classList.remove(this._config.inputErrorClass) // при показе текста удаляем класс со стилем ошибки
     }
 
-    _checkInputValidity(inputItem, formItem, config) { // функция проверки полей на валидность
+    _checkInputValidity(inputItem) { // функция проверки полей на валидность
         const errorSpanText = this._formElement.querySelector(`#${inputItem.name}-error`) // создаем переменную и находим все спаны (текст ошибки)
         if (!inputItem.validity.valid) { // если инпут поле не валидно вызвать функцию ошибки
-            this._showErrorInput(inputItem, errorSpanText, config)
+            this._showErrorInput(inputItem, errorSpanText)
         } else { // иначе если поле валидно скрывать ошибку
-            this._hideErrorInput(inputItem, errorSpanText, config)
+            this._hideErrorInput(inputItem, errorSpanText)
         }
     }
 
-    _hasInvalidInput(inputsList) { // функция проверки валидности полей для блокировки кнопки (true - невалидное поле)
-        return inputsList.some((inputItem) => { // (комментарии из теории): проходим по этому массиву методом some
+    _hasInvalidInput() { // функция проверки валидности полей для блокировки кнопки (true - невалидное поле)
+        return this._inputList.some((inputItem) => { // (комментарии из теории): проходим по этому массиву методом some
             // Если поле не валидно, колбэк вернёт true Обход массива прекратится и вся функция hasInvalidInput вернёт true
             return !inputItem.validity.valid;
         })
     }
 
-    _checkInvalidButton(submitButtonPopup, config) { // функция проверки валидности кнопки при добавлении2й карточки(для index.js)
-        submitButtonPopup.classList.add(config.inactiveButtonClass)
-        submitButtonPopup.disabled = 'invalid'
+    _checkInvalidButton() { // функция проверки валидности кнопки при добавлении2й карточки(для index.js)
+        this._submitButtonPopup.classList.add(this._config.inactiveButtonClass)
+        this._submitButtonPopup.disabled = 'invalid'
     }
 
-    _toggleButtonState(inputsList, submitButtonPopup, config) { // функция переключения состояния кнопки если не/валидна
-        if (hasInvalidInput(inputsList)) { // если поле невалидно
-            checkInvalidButton(submitButtonPopup, config)
+    _toggleButtonState() { // функция переключения состояния кнопки если не/валидна
+        if (this._hasInvalidInput()) { // если поле невалидно
+            this._checkInvalidButton()
         } else { // иначе если валидно
-            submitButtonPopup.classList.remove(config.inactiveButtonClass) // из ревью - можно создать функцию в validate - продумать реализацию!
-            submitButtonPopup.disabled = false
+            this._submitButtonPopup.classList.remove(this._config.inactiveButtonClass)
+            this._submitButtonPopup.disabled = false
         }
     }
 
-    _setEventListener(formItem, config) { // функция установки слушателей событий
-        const inputsList = Array.from(formItem.querySelectorAll(config.inputSelector)) // находим инпуты в формах
-        inputsList.forEach(function (inputItem) { // перебираем каждый инпут и вешаем обработчик и событие ввод
+    _setEventListener() { // функция установки слушателей событий
+        this._inputList.forEach(inputItem => { // перебираем каждый инпут и вешаем обработчик и событие ввод
             inputItem.addEventListener('input', () => { // событие ввода и фукнция проверки поля на валидность
-                toggleButtonState(inputsList, submitButtonPopup, config)
-                checkInputValidity(inputItem, formItem, config)
+                this._toggleButtonState()
+                this._checkInputValidity(inputItem)
             })
         })
-
-        const submitButtonPopup = formItem.querySelector(config.submitButtonSelector) // находим кнопки "сохранить"
-        toggleButtonState(inputsList, submitButtonPopup, config)
-
-        formItem.addEventListener('submit', function (evt) { // обработчик на кнопку и отмена стандартной отправки
+        this._formElement.addEventListener('submit', (evt) => { // обработчик на кнопку и отмена стандартной отправки
             evt.preventDefault()
+            this._toggleButtonState()
         })
+        this._toggleButtonState()
     }
 
-    enableValidation(config) { // функция включения валидации всех форм
-        const formList = Array.from(document.querySelectorAll(config.formSelector)) // находим в конст все формы на странице (делаем массивом сразу)
-        formList.forEach(function (formItem) { // перебираем каждую форму и функция установки слушателей
-            setEventListener(formItem, config)
+    enableValidation() { // функция включения валидации всех форм
+        const formList = Array.from(document.querySelectorAll(this._config.formSelector)) // находим в конст все формы на странице (делаем массивом сразу)
+        formList.forEach(formItem => { // перебираем каждую форму и функция установки слушателей
+            this._setEventListener(formItem)
         })
     }
 }
-
-enableValidation(configForm)
-
-const configForm = { // конфиг формы для удобства
-    formSelector: '.popup__content',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__submit',
-    inactiveButtonClass: 'popup__submit_disabled', // класс неактивной кнопки
-    inputErrorClass: 'popup__input_type_error', // класс невалидного поля
-};
