@@ -51,6 +51,7 @@ export default class FormValidator {
             inputItem.addEventListener('input', () => { // событие ввода и фукнция проверки поля на валидность
                 this._toggleButtonState()
                 this._checkInputValidity(inputItem)
+                console.log(1)
             })
         })
         this._formElement.addEventListener('submit', (evt) => { // обработчик на кнопку и отмена стандартной отправки
@@ -61,9 +62,6 @@ export default class FormValidator {
     }
 
     enableValidation() { // функция включения валидации всех форм
-        const formList = Array.from(document.querySelectorAll(this._config.formSelector)) // находим в конст все формы на странице (делаем массивом сразу)
-        formList.forEach(formItem => { // перебираем каждую форму и функция установки слушателей
-            this._setEventListener(formItem)
-        })
+        this._setEventListener()
     }
 }
