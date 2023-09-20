@@ -51,7 +51,7 @@ export default class FormValidator {
             inputItem.addEventListener('input', () => { // событие ввода и фукнция проверки поля на валидность
                 this._toggleButtonState()
                 this._checkInputValidity(inputItem)
-                console.log(1)
+                //console.log(1)
             })
         })
         this._formElement.addEventListener('submit', (evt) => { // обработчик на кнопку и отмена стандартной отправки
@@ -61,7 +61,7 @@ export default class FormValidator {
         this._toggleButtonState()
     }
 
-    enableValidation() { // функция включения валидации всех форм
+    enableValidation() { // функция включения валидации формы, которую передаем в конструктор
         this._setEventListener()
     }
 }
