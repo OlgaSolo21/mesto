@@ -29,7 +29,7 @@ export default class Card { // создаем класс карточки, в н
         this._element.querySelector('.cards__like').addEventListener('click', (evt) => { // лайк карточки
             this._likeCardItem(evt)
         })
-        this._element.querySelector('.cards__image').addEventListener('click', () => {
+        this._element.querySelector('.cards__image').addEventListener('click', () => { // открытие на весь экран
             this._handleOpenFullScreen(this._link, this._name);
         });
     }
