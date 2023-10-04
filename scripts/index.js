@@ -37,6 +37,81 @@ const popupFullScreen = document.querySelector('#fullscreen-card') // сам п�
 const imageFullScreenInput = popupFullScreen.querySelector('.popup__image') // инпут картинки карточки места
 const captionFullScreenInput = popupFullScreen.querySelector('.popup__caption') // инпут подписи места к картинке
 
+// ООП СОЗДАНИЕ КАРТОЧКИ
+//8пр - создание массива карточек через section
+function createCard(data) { // функцию создания карточки, используем публичный метод из класса
+    const card = new Card(data, '.cards_template', openFullScreenPopup) //экземпляр класса Card чтобы шаблон карточки получить
+    return card.generateCard() // возвращаем функцию публикации карточки
+}
+
+const section = new Section({ //создание карточек из класса section
+    items: initialCards, // это массив карточек
+    renderer: (item) => { //У класса Section нет своей разметки. Он получает разметку через функцию-колбэк и вставляет её в контейнер.
+        const cardElement = createCard(item) // используем функцию создания НОВОЙ карточки и добавление ее в начало контейнера
+        section.addItem(cardElement)
+    }
+}, '.cards__elements')
+section.renderItems() // отрисовываем карточки
+
+// ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+const popupEditForm = new PopupWithForm({
+    popupSelector: '#edit-profile',
+    handleFormSubmitCallback: () => {
+
+    }
+})
+function openEditPopup() { //функция открытия
+    // nameEditInput.value = profileEditTitle.textContent
+    // jobEditInput.value = profileEditSubtitle.textContent
+    popupEditForm.open()
+}
+buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
+popupEditForm.setEventListeners() // слушатели закрытия попапа редактирования
+
+function closeEditPopup() { //функция закрытия
+    closePopup(popupEdit)
+}
+function handleEditFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
+    evt.preventDefault()
+    profileEditTitle.textContent = nameEditInput.value
+    profileEditSubtitle.textContent = jobEditInput.value
+    closeEditPopup()
+}
+formEditElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
+
+// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ
+const popupAddForm = new PopupWithForm({
+    popupSelector: '#add-card',
+    handleFormSubmitCallback: (data) => {
+        const newCard = {name:data[titleAddInput.name], link:data[imageAddInput.name]}
+        const cardAddElement = createCard(newCard);
+        section.addItem(cardAddElement)
+        popupAddForm.close()
+    }
+},)
+function openAddPopup() { //функция открытия
+    popupAddForm.open()
+}
+buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
+popupAddForm.setEventListeners() // слушатели закрытия
+
+// ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
+const fullScreenImage = new PopupWithImage('.popup_fullscreen')
+function openFullScreenPopup(img, title) { // функция открытия попап "на весь экран"
+    fullScreenImage.open(img, title)
+}
+fullScreenImage.setEventListeners() // слушатели закрытия фото на весь экран
+
+
+forms.forEach((formElement) => { // экземпляр класса валидации
+    const formValidator = new FormValidator(configForm, formElement)
+    formValidator.enableValidation()
+})
+
+
+// function createNewCard(cardNew) { //функция создания новой карточки для добавления
+//     section.addItem(createCard(cardNew)) //используе метод addItem классф section и функцию создания карточки
+// }
 // УНИВЕРСАЛЬНЫЕ ФУНКЦИИ
 // открытия попапов
 // в функцию передали параметр попап, далее в уникальных ф-ях вместо popup будем ставить константы каждого попапа
@@ -78,85 +153,3 @@ const captionFullScreenInput = popupFullScreen.querySelector('.popup__caption') 
 //     }
 // }
 
-// ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ: вся работа с ним
-function openEditPopup() { //функция открытия
-    nameEditInput.value = profileEditTitle.textContent
-    jobEditInput.value = profileEditSubtitle.textContent
-    openPopup(popupEdit)
-}
-buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
-
-function closeEditPopup() { //функция закрытия
-    closePopup(popupEdit)
-}
-function handleEditFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
-    evt.preventDefault()
-    profileEditTitle.textContent = nameEditInput.value
-    profileEditSubtitle.textContent = jobEditInput.value
-    closeEditPopup()
-}
-formEditElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
-
-// ООП СОЗДАНИЕ КАРТОЧКИ
-//8пр - создание массива карточек через section
-const section = new Section({ //создание карточек из класса section
-    items: initialCards, // это массив карточек
-    renderer: (item) => { //У класса Section нет своей разметки. Он получает разметку через функцию-колбэк и вставляет её в контейнер.
-        const cardElement = createCard(item) // используем функцию создания НОВОЙ карточки и добавление ее в начало контейнера
-        section.addItem(cardElement)
-    }
-}, '.cards__elements')
-
-section.renderItems()
-
-function createCard(data) { // функцию создания карточки, используем публичный метод из класса
-    const card = new Card(data, '.cards_template', openFullScreenPopup)
-    return card.generateCard()
-}
-
-// ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
-const fullScreenImage = new PopupWithImage('.popup_fullscreen')
-function openFullScreenPopup(img, title) { // функция открытия попап "на весь экран"
-    fullScreenImage.open(img, title)
-}
-fullScreenImage.setEventListeners()
-
-// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ: вся работа с ним
-const popupAddForm = new PopupWithForm({
-    popupSelector: '#add-card',
-    handleFormSubmitCallback: (data) => {
-        const cardAddElement = createCard(data)
-        section.addItem(cardAddElement)
-        popupAddForm.close()
-    }
-},)
-function openAddPopup() { //функция открытия
-    popupAddForm.open()
-}
-buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
-popupAddForm.setEventListeners() // слушатели закрытия
-
-// function closeAddPopup() { //функция закрытия
-//     closePopup(popupAdd)
-// }
-
-// function createNewCard(cardNew) { //функция создания новой карточки для добавления
-//     section.addItem(createCard(cardNew)) //используе метод addItem классф section и функцию создания карточки
-// }
-
-// function handleFormAddSubmit(evt) { // функция обработки отправки формы добавления карточки и отмена стандартной отправки на сервер
-//     evt.preventDefault();
-//     const cardNewSave = {name: titleAddInput.value, link: imageAddInput.value};
-//     createNewCard(cardNewSave); // переменная - cardNewSave со значениями инпутов (объект)
-//     // titleAddInput.value = '' // стираем данные для след карточки - 2й вариант очистки полей
-//     // imageAddInput.value = ''
-//     closeAddPopup()
-//     formAddInput.reset() //  рекомендация ревью 6пр - очистить форму исп меньше кода (метод reset)
-// }
-
-//formAddInput.addEventListener('submit', handleFormAddSubmit) // слушатель формы инпутов добавления новой карточки
-
-forms.forEach((formElement) => { // экземпляр класса валидации
-    const formValidator = new FormValidator(configForm, formElement)
-    formValidator.enableValidation()
-})
