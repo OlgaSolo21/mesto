@@ -5,6 +5,7 @@ import Section from './Section.js'
 import {initialCards} from './initialCards.js'
 import PopupWithImage from './PopupWithImage.js';
 import PopupWithForm from './PopupWithForm.js';
+import UserInfo from "./UserInfo.js";
 
 export const configForm = { // конфиг формы для удобства
     popupSelector: '.popup',
@@ -54,30 +55,26 @@ const section = new Section({ //создание карточек из клас�
 section.renderItems() // отрисовываем карточки
 
 // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+const userInfo = new UserInfo({ // создаем экземпляр класса UserInfo
+    nameEditInput: '.popup__input_type_name',
+    jobEditInput: '.popup__input_type_job'
+})
 const popupEditForm = new PopupWithForm({
     popupSelector: '#edit-profile',
-    handleFormSubmitCallback: () => {
-
+    handleFormSubmitCallback: (data) => {
+        // const userGetInfo = {name:data[nameEditInput.name], link:data[jobEditInput.name]}
+        userInfo.setUserInfo(data.UserName, data.UserJob)
+        popupEditForm.close()
     }
 })
 function openEditPopup() { //функция открытия
-    // nameEditInput.value = profileEditTitle.textContent
-    // jobEditInput.value = profileEditSubtitle.textContent
+    const {name, job} = userInfo.getUserInfo()
+    nameEditInput.value = name.textContent
+    jobEditInput.value = job.textContent
     popupEditForm.open()
 }
 buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
 popupEditForm.setEventListeners() // слушатели закрытия попапа редактирования
-
-function closeEditPopup() { //функция закрытия
-    closePopup(popupEdit)
-}
-function handleEditFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
-    evt.preventDefault()
-    profileEditTitle.textContent = nameEditInput.value
-    profileEditSubtitle.textContent = jobEditInput.value
-    closeEditPopup()
-}
-formEditElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
 
 // ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ
 const popupAddForm = new PopupWithForm({
@@ -112,6 +109,18 @@ forms.forEach((formElement) => { // экземпляр класса валида
 // function createNewCard(cardNew) { //функция создания новой карточки для добавления
 //     section.addItem(createCard(cardNew)) //используе метод addItem классф section и функцию создания карточки
 // }
+
+// function closeEditPopup() { //функция закрытия
+//     closePopup(popupEdit)
+// }
+// function handleEditFormSubmit(evt) { // функция обработки отправки формы редактирования и отмена стандартной отправки на сервер
+//     evt.preventDefault()
+//     profileEditTitle.textContent = nameEditInput.value
+//     profileEditSubtitle.textContent = jobEditInput.value
+//     closeEditPopup()
+// }
+// formEditElement.addEventListener('submit', handleEditFormSubmit) // слушатель формы инпутов (кнопка "сохранить")
+
 // УНИВЕРСАЛЬНЫЕ ФУНКЦИИ
 // открытия попапов
 // в функцию передали параметр попап, далее в уникальных ф-ях вместо popup будем ставить константы каждого попапа
