@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesto</title>
-    <link rel="stylesheet" href="./pages/index.css">
 </head>
 <body class="root">
     <header class="header">
@@ -12,13 +11,13 @@
     </header>
     <main class="content">
         <section class="profile">
-            <img src="images/avatar_Profile.jpg" alt="Фото профиля" class="profile__avatar">
+            <img src="<%=require('./images/avatar_Profile.jpg')%>" alt="Фото профиля" class="profile__avatar">
             <div class="profile__info">
                 <h1 class="profile__title">Жак-Ив Кусто</h1>
                 <button type="button" aria-label="Edit" class="profile__edit-button cursor"></button>
                 <p class="profile__subtitle">Исследователь океана</p>
             </div>
-            <button type="button" aria-label="Add" class="profile__add-button cursor"><img src="images/addButton.svg" alt="Кнопка добавить"></button>
+            <button type="button" aria-label="Add" class="profile__add-button cursor"><img src="<%=require('./images/addButton.svg')%>" alt="Кнопка добавить"></button>
         </section>
        <section class="cards">
             <ul class="cards__elements">
@@ -73,6 +72,6 @@
             </div>
         </li>
     </template>
-    <script type="module" src="./pages/index.js" defer></script>
+    <script type="module" src="index.js" defer></script>
 </body>
 </html>

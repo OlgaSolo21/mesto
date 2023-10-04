@@ -1,11 +1,12 @@
+import './pages/index.css'; // добавьте импорт главного файла стилей
 // импорты модулей
-import Card from '../components/Card.js'
-import FormValidator from '../components/FormValidator.js'
-import Section from '../components/Section.js'
-import {initialCards} from '../components/initialCards.js'
-import PopupWithImage from '../components/PopupWithImage.js';
-import PopupWithForm from '../components/PopupWithForm.js';
-import UserInfo from "../components/UserInfo.js";
+import Card from './components/Card.js'
+import FormValidator from './components/FormValidator.js'
+import Section from './components/Section.js'
+import {initialCards} from './components/initialCards.js'
+import PopupWithImage from './components/PopupWithImage.js';
+import PopupWithForm from './components/PopupWithForm.js';
+import UserInfo from "./components/UserInfo.js";
 import {
     configForm,
     forms,
@@ -17,7 +18,7 @@ import {
     buttonAddPopup,
     titleAddInput,
     imageAddInput
-} from '../utils/constants.js'
+} from './utils/constants.js'
 
 // ООП СОЗДАНИЕ КАРТОЧКИ
 //8пр - создание массива карточек через section
