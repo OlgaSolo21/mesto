@@ -1,9 +1,9 @@
 export default class Card { // создаем класс карточки, в ней будет вся разметка, создание новой карточки и все функции
-    constructor(data, templateSelector, handleOpenFullScreen) {
+    constructor(data, templateSelector, handleCardClick) {
         this._name = data.name
         this._link = data.link
         this._templateSelector = templateSelector
-        this._handleOpenFullScreen = handleOpenFullScreen
+        this.handleCardClick = handleCardClick
     }
 
     generateCard() { //готовим карточку к публикации
@@ -30,7 +30,7 @@ export default class Card { // создаем класс карточки, в н
             this._likeCardItem(evt)
         })
         this._element.querySelector('.cards__image').addEventListener('click', () => { // открытие на весь экран
-            this._handleOpenFullScreen(this._link, this._name);
+            this.handleCardClick(this._link, this._name);
         });
     }
 
