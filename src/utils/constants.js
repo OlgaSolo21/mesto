@@ -10,8 +10,6 @@ export const configForm = { // конфиг формы для удобства
 export const forms = document.querySelectorAll('.popup__content')
 // попап редактирования профиля
 export const buttonEditPopup = document.querySelector('.profile__edit-button') // кнопка карандаш редактирования профиля
-export const profileEditTitle = document.querySelector('.profile__title') // строка "имя" профиля
-export const profileEditSubtitle = document.querySelector('.profile__subtitle') // строка "о себе" профиля
 export const nameEditInput = document.querySelector('.popup__input_type_name') // инпут редактирования имени профиля
 export const jobEditInput = document.querySelector('.popup__input_type_job') // инпут редактирования "о себе"
 // попап добавления новой карточки с местом

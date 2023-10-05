@@ -11,8 +11,6 @@ import {
     configForm,
     forms,
     buttonEditPopup,
-    profileEditTitle,
-    profileEditSubtitle,
     nameEditInput,
     jobEditInput,
     buttonAddPopup,
@@ -51,9 +49,9 @@ const popupEditForm = new PopupWithForm({
 })
 
 function openEditPopup() {
-    userInfo.getUserInfo()
-    nameEditInput.value = profileEditTitle.textContent
-    jobEditInput.value = profileEditSubtitle.textContent
+    const userElement = userInfo.getUserInfo()
+    nameEditInput.value = userElement.profileEditTitle
+    jobEditInput.value = userElement.profileEditSubtitle
     popupEditForm.open()
 }
 buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
