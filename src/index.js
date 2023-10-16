@@ -10,6 +10,7 @@ import UserInfo from "./components/UserInfo.js";
 import {
     configForm,
     forms,
+    avatarEditProfile,
     buttonEditPopup,
     nameEditInput,
     jobEditInput,
@@ -48,12 +49,27 @@ const popupEditForm = new PopupWithForm({
     }
 })
 
+const popupEditAvatarForm = new PopupWithForm({
+    popupSelector: '#edit-avatar-profile',
+    handleFormSubmitCallback: () => {
+        popupEditAvatarForm.open()
+    }
+})
+
 function openEditPopup() {
     const userElement = userInfo.getUserInfo()
     nameEditInput.value = userElement.profileEditTitle
     jobEditInput.value = userElement.profileEditSubtitle
     popupEditForm.open()
 }
+
+function openEditAvatar() {
+    popupEditAvatarForm.open()
+}
+
+avatarEditProfile.addEventListener('click', openEditAvatar)
+popupEditAvatarForm.setEventListeners()
+
 buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
 popupEditForm.setEventListeners() // слушатели закрытия попапа редактирования
 
