@@ -18,24 +18,42 @@ import {
     titleAddInput,
     imageAddInput
 } from './utils/constants.js'
+import Api from "./components/Api.js";
 
-// ООП СОЗДАНИЕ КАРТОЧКИ
-//8пр - создание массива карточек через section
+// сделать запрос к серверу
+const apiConfig = {
+    url: 'https://mesto.nomoreparties.co/v1/cohort-77',
+    headers: {
+        authorization: '7f52bf50-52cc-48bd-9c80-c48495da8ea4',
+        'Content-Type': 'application/json'
+    }
+}
+const api = new Api(apiConfig)
+
+// СОЗДАНИЕ КАРТОЧКИ
+// создание массива карточек через section
 function createCard(data) { // функцию создания карточки, используем публичный метод из класса
     const card = new Card(data, '.cards_template', openFullScreenPopup) //экземпляр класса Card чтобы шаблон карточки получить
     return card.generateCard() // возвращаем функцию публикации карточки
 }
-
 const section = new Section({ //создание карточек из класса section
-    items: initialCards, // это массив карточек
     renderer: (item) => { //У класса Section нет своей разметки. Он получает разметку через функцию-колбэк и вставляет её в контейнер.
         const cardElement = createCard(item) // используем функцию создания НОВОЙ карточки и добавление ее в начало контейнера
         section.addItem(cardElement)
     }
 }, '.cards__elements')
-section.renderItems() // отрисовываем карточки
+
+api.getInitialCards()
+    .then((item) => {
+        section.renderItems(item) // отрисовываем карточки
+    })
+    .catch((error) => console.log(error));
 
 // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
+api.getUserProfile()
+    .then((data) => {
+        console.log(data)
+    })
 const userInfo = new UserInfo({ // создаем экземпляр класса UserInfo
     nameEditInput: '.profile__title',
     jobEditInput: '.profile__subtitle'
@@ -49,20 +67,19 @@ const popupEditForm = new PopupWithForm({
     }
 })
 
-const popupEditAvatarForm = new PopupWithForm({
-    popupSelector: '#edit-avatar-profile',
-    handleFormSubmitCallback: () => {
-        popupEditAvatarForm.open()
-    }
-})
-
 function openEditPopup() {
     const userElement = userInfo.getUserInfo()
     nameEditInput.value = userElement.profileEditTitle
     jobEditInput.value = userElement.profileEditSubtitle
     popupEditForm.open()
 }
-
+// 9
+const popupEditAvatarForm = new PopupWithForm({
+    popupSelector: '#edit-avatar-profile',
+    handleFormSubmitCallback: () => {
+        popupEditAvatarForm.open()
+    }
+})
 function openEditAvatar() {
     popupEditAvatarForm.open()
 }
