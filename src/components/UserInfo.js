@@ -6,13 +6,13 @@ export default class UserInfo {
 
     getUserInfo() {
         return {
-            profileEditTitle: this._nameEditInput.textContent,
-            profileEditSubtitle: this._jobEditInput.textContent
+            name: this._nameEditInput.textContent,
+            about: this._jobEditInput.textContent
         }
     }
 
-    setUserInfo(profileEditTitle, profileEditSubtitle) {
-        this._nameEditInput.textContent = profileEditTitle;
-        this._jobEditInput.textContent = profileEditSubtitle;
+    setUserInfo(data) {//метод берет значения name и about, и записывает их в разметку
+        this._nameEditInput.textContent = data.name;
+        this._jobEditInput.textContent = data.about;
     }
 }

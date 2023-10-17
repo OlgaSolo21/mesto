@@ -4,31 +4,52 @@ export default class Api {
         this._headers = headers
     }
 
-    getInitialCards() {
+    _handleResponse(res) {
+        if (res.ok) {
+            return res.json();
+        } else {
+            return Promise.reject(`Ошибка: ${res.status}`);
+        }
+    }
+
+    getInitialCards() { //запрос на сервер для получения карточек
         return fetch(`${this._url}/cards`, {
             headers: this._headers,
             method: 'GET'
         })
-            .then((res) => {
-                if(res.ok) {
-                    return res.json()
-                } else {
-                    return Promise.reject(`Ошибка: ${res.status}`)
-                }
-            })
+            .then(this._handleResponse)
     }
 
-    getUserProfile() {
+    getUserProfile() { // запрос на сервер для получения данных о пользователе
         return fetch(`${this._url}/users/me`, {
             headers: this._headers,
             method: 'GET'
         })
-            .then((res) => {
-                if(res.ok) {
-                    return res.json()
-                } else {
-                    return Promise.reject(`Ошибка: ${res.status}`)
-                }
-            })
+            .then(this._handleResponse)
     }
+
+    editProfilePatch(data) { // Редактирование профиля посылаем запрос методом PATCH
+        return fetch(`${this._url}/users/me`, {
+            headers: this._headers,
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: data.UserName,
+                about: data.UserJob
+            })
+        })
+            .then(this._handleResponse)
+    }
+
+    addNewCardPost(data) { //Добавление новой карточки POST-запрос
+        return fetch(`${this._url}/cards`, {
+            headers: this._headers,
+            method: 'POST',
+            body: JSON.stringify({
+                name: data.UserPlace,
+                link: data.UserLink
+            })
+        })
+            .then(this._handleResponse)
+    }
+
 }

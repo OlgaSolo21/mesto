@@ -3,7 +3,6 @@ import './pages/index.css'; // добавьте импорт главного ф
 import Card from './components/Card.js'
 import FormValidator from './components/FormValidator.js'
 import Section from './components/Section.js'
-import {initialCards} from './components/initialCards.js'
 import PopupWithImage from './components/PopupWithImage.js';
 import PopupWithForm from './components/PopupWithForm.js';
 import UserInfo from "./components/UserInfo.js";
@@ -30,12 +29,23 @@ const apiConfig = {
 }
 const api = new Api(apiConfig)
 
+// отрисовываем всю страницу
+Promise.all([api.getUserProfile(), api.getInitialCards()])
+    .then(([userElement, itemCard]) => {
+        userInfo.setUserInfo(userElement)
+        section.renderItems(itemCard)
+    })
+    .catch((err) => {
+        console.log(`Ошибка: ${err}`)
+    })
+
 // СОЗДАНИЕ КАРТОЧКИ
-// создание массива карточек через section
-function createCard(data) { // функцию создания карточки, используем публичный метод из класса
+// функцию создания карточки, используем публичный метод из класса
+function createCard(data) {
     const card = new Card(data, '.cards_template', openFullScreenPopup) //экземпляр класса Card чтобы шаблон карточки получить
     return card.generateCard() // возвращаем функцию публикации карточки
 }
+// создание массива карточек через section
 const section = new Section({ //создание карточек из класса section
     renderer: (item) => { //У класса Section нет своей разметки. Он получает разметку через функцию-колбэк и вставляет её в контейнер.
         const cardElement = createCard(item) // используем функцию создания НОВОЙ карточки и добавление ее в начало контейнера
@@ -43,68 +53,54 @@ const section = new Section({ //создание карточек из клас�
     }
 }, '.cards__elements')
 
-api.getInitialCards()
-    .then((item) => {
-        section.renderItems(item) // отрисовываем карточки
-    })
-    .catch((error) => console.log(error));
+// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ
+const popupAddForm = new PopupWithForm({
+    popupSelector: '#add-card',
+    handleFormSubmitCallback: (data) => { // используем api
+        console.log(data)
+        api.addNewCardPost(data)
+            .then((res) => {
+                section.addItem(createCard(res)) // section отрисовывает новую карточку в разметку
+                popupAddForm.close()
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+},)
+buttonAddPopup.addEventListener('click', () => {popupAddForm.open()}) // слушатель кнопки открытия попапа добавления новой карточки с местом
+popupAddForm.setEventListeners() // слушатели закрытия
+
 
 // ПОПАП РЕДАКТИРОВАНИЯ ПРОФИЛЯ
-api.getUserProfile()
-    .then((data) => {
-        console.log(data)
-    })
 const userInfo = new UserInfo({ // создаем экземпляр класса UserInfo
     nameEditInput: '.profile__title',
-    jobEditInput: '.profile__subtitle'
+    jobEditInput: '.profile__subtitle',
+    avatarEditProfile: '.profile__avatar'
+})
+
+// слушатель кнопки открытия попапа редактирования профиля
+buttonEditPopup.addEventListener('click', () => {
+    const userElement = userInfo.getUserInfo()
+    nameEditInput.value = userElement.name
+    jobEditInput.value = userElement.about
+    popupEditForm.open()
 })
 
 const popupEditForm = new PopupWithForm({
     popupSelector: '#edit-profile',
     handleFormSubmitCallback: (data) => {
-        userInfo.setUserInfo(data.UserName, data.UserJob)
-        popupEditForm.close()
+        api.editProfilePatch(data)
+            .then((res) => {
+                userInfo.setUserInfo(res)
+                popupEditForm.close()
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 })
-
-function openEditPopup() {
-    const userElement = userInfo.getUserInfo()
-    nameEditInput.value = userElement.profileEditTitle
-    jobEditInput.value = userElement.profileEditSubtitle
-    popupEditForm.open()
-}
-// 9
-const popupEditAvatarForm = new PopupWithForm({
-    popupSelector: '#edit-avatar-profile',
-    handleFormSubmitCallback: () => {
-        popupEditAvatarForm.open()
-    }
-})
-function openEditAvatar() {
-    popupEditAvatarForm.open()
-}
-
-avatarEditProfile.addEventListener('click', openEditAvatar)
-popupEditAvatarForm.setEventListeners()
-
-buttonEditPopup.addEventListener('click', openEditPopup) // слушатель кнопки открытия попапа редактирования профиля
-popupEditForm.setEventListeners() // слушатели закрытия попапа редактирования
-
-// ПОПАП ДОБАВЛЕНИЯ НОВОЙ КАРТОЧКИ С МЕСТОМ
-const popupAddForm = new PopupWithForm({
-    popupSelector: '#add-card',
-    handleFormSubmitCallback: (data) => {
-        const newCard = {name:data[titleAddInput.name], link:data[imageAddInput.name]}
-        const cardAddElement = createCard(newCard);
-        section.addItem(cardAddElement)
-        popupAddForm.close()
-    }
-},)
-function openAddPopup() { //функция открытия
-    popupAddForm.open()
-}
-buttonAddPopup.addEventListener('click', openAddPopup) // слушатель кнопки открытия попапа добавления новой карточки с местом
-popupAddForm.setEventListeners() // слушатели закрытия
+popupEditForm.setEventListeners() // слушатели попапа редактирования
 
 // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
 const fullScreenImage = new PopupWithImage('.popup_fullscreen')

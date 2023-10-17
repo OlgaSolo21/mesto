@@ -2,6 +2,7 @@ export default class Card { // создаем класс карточки, в н
     constructor(data, templateSelector, handleCardClick) {
         this._name = data.name
         this._link = data.link
+        this._likes = data._likes
         this._templateSelector = templateSelector
         this.handleCardClick = handleCardClick
     }
