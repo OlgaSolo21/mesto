@@ -43,4 +43,8 @@ export default class Card { // создаем класс карточки, в н
     _likeCardItem(evt) { // метод лайка карточки (сердечко)
         evt.target.classList.toggle('cards__like_active')
     }
+
+    changeAmountLikes() {
+
+    }
 }
