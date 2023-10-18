@@ -28,23 +28,44 @@ const apiConfig = {
     }
 }
 const api = new Api(apiConfig)
+let userId
+let cardId
 
 // отрисовываем всю страницу
 Promise.all([api.getUserProfile(), api.getInitialCards()])
     .then(([userElement, itemCard]) => {
-        userInfo.setUserInfo(userElement)
-        section.renderItems(itemCard)
+        userId = userElement._id;
+        cardId = itemCard._id
+        userInfo.setUserInfo(userElement);
+        section.renderItems(itemCard);
     })
     .catch((err) => {
         console.log(`Ошибка: ${err}`)
     })
 
 // СОЗДАНИЕ КАРТОЧКИ
-// функцию создания карточки, используем публичный метод из класса
 function createCard(data) {
-    const card = new Card(data, '.cards_template', openFullScreenPopup) //экземпляр класса Card чтобы шаблон карточки получить
+    const card = new Card( //экземпляр класса Card чтобы шаблон карточки получить
+        '.cards_template',
+        {
+            data: data,
+            userId: userId,
+            handleCardFullscreen: openFullScreenPopup, // тут функция отурытия фото на весь экран
+            handleSetLike: (cardId) => { // тут функция отображения лайков
+                api.setLikeCardPut(cardId)
+                    .then((data) => {
+                        card.changeAmountLikes(data)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            }
+            // тут фукция удаления лайков
+            // тут фуекция удаления карточки на корзину
+        })
     return card.generateCard() // возвращаем функцию публикации карточки
 }
+
 // создание массива карточек через section
 const section = new Section({ //создание карточек из класса section
     renderer: (item) => { //У класса Section нет своей разметки. Он получает разметку через функцию-колбэк и вставляет её в контейнер.

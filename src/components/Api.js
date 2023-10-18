@@ -52,4 +52,20 @@ export default class Api {
             .then(this._handleResponse)
     }
 
+    setLikeCardPut() { // Постановка лайка
+        return fetch(`${this._url}/cards/${cardId}/likes`, {
+            headers: this._headers,
+            method: 'PUT'
+        })
+            .then(this._handleResponse)
+    }
+
+    deleteLikeCard() { // Снятие лайка
+        return fetch(`${this._url}/cards/${cardId}/likes`, {
+            headers: this._headers,
+            method: 'DELETE'
+        })
+            .then(this._handleResponse)
+    }
+
 }
