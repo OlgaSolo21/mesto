@@ -1,43 +1,34 @@
-import './pages/index.css'; // добавьте импорт главного файла стилей
+import './index.css'; // добавьте импорт главного файла стилей
 // импорты модулей
-import Card from './components/Card.js'
-import FormValidator from './components/FormValidator.js'
-import Section from './components/Section.js'
-import PopupWithImage from './components/PopupWithImage.js';
-import PopupWithForm from './components/PopupWithForm.js';
-import UserInfo from "./components/UserInfo.js";
+import Card from '../components/Card.js'
+import FormValidator from '../components/FormValidator.js'
+import Section from '../components/Section.js'
+import PopupWithImage from '../components/PopupWithImage.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import UserInfo from "../components/UserInfo.js";
 import {
     configForm,
-    forms,
+    apiConfig,
     avatarEditProfile,
     buttonEditPopup,
     nameEditInput,
     jobEditInput,
     buttonAddPopup,
     popupAddFormValidation, popupEditFormValidation, popupUpdateAvatarValidation,
-} from './utils/constants.js'
-import Api from "./components/Api.js";
-import PopupWithFormDeleteCard from "./components/PopupWithFormDeleteCard.js";
+} from '../utils/constants.js'
+import Api from "../components/Api.js";
+import PopupWithFormDeleteCard from "../components/PopupWithFormDeleteCard.js";
 
-// сделать запрос к серверу
-const apiConfig = {
-    url: 'https://mesto.nomoreparties.co/v1/cohort-77',
-    headers: {
-        authorization: '7f52bf50-52cc-48bd-9c80-c48495da8ea4',
-        'Content-Type': 'application/json'
-    }
-}
 const api = new Api(apiConfig)
 let userId
 let cardId
 
 // отрисовываем всю страницу
 Promise.all([api.getUserProfile(), api.getInitialCards()])
-    .then(([userElement, itemCard]) => {
+    .then(([userElement, itemCards]) => {
         userId = userElement._id;
-        cardId = itemCard._id
         userInfo.setUserInfo(userElement);
-        section.renderItems(itemCard);
+        section.renderItems(itemCards);
     })
     .catch((err) => {
         console.log(`Ошибка: ${err}`)
@@ -55,6 +46,7 @@ function createCard(data) {
             likes: data.likes,
             _id: data._id,
             handleCardFullscreen: openFullScreenPopup, // тут функция отурытия фото на весь экран
+            //!--рекомендация ревью сделать отдельные функции - попробовать реализовать--!//
             handleSetLike: (cardId) => { // тут функция отображения лайков
                 api.setLikeCardPut(cardId)
                     .then((data) => {
@@ -105,7 +97,7 @@ const popupAddForm = new PopupWithForm({
         popupAddForm.renderLoadingUX(true)
         api.addNewCardPost(data)
             .then((res) => {
-                section.addItem(createCard(res)) // section отрисовывает новую карточку в разметку
+                section.addNewCard(createCard(res)) // section отрисовывает новую карточку в разметку
                 popupAddForm.close()
             })
             .catch((err) => {

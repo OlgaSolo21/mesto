@@ -9,6 +9,10 @@ export default class Section {
     }
 
     addItem(element) { // публичный метод, который принимает DOM-элемент и добавляет его в контейнер.
+        this._container.append(element);
+    }
+
+    addNewCard(element) { // публичный метод, чтобы новую добавить картчку (при обновлении карточки улетают вниз)
         this._container.prepend(element);
     }
 }

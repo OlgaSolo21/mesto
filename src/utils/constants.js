@@ -7,8 +7,15 @@ export const configForm = { // конфиг формы для удобства
     errorClass: 'popup__span-error_active',
     inputErrorClass: 'popup__input_type_error', // класс невалидного поля
 };
-// основная константа всех форм
-export const forms = document.querySelectorAll('.popup__content')
+
+// сделать запрос к серверу
+export const apiConfig = {
+    url: 'https://mesto.nomoreparties.co/v1/cohort-77',
+    headers: {
+        authorization: '7f52bf50-52cc-48bd-9c80-c48495da8ea4',
+        'Content-Type': 'application/json'
+    }
+}
 
 // попап редактирования профиля
 export const avatarEditProfile = document.querySelector('.profile__icon') // карандаш аватара

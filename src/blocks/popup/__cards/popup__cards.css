@@ -1,8 +1,6 @@
 .popup__cards {
     display: flex;
     flex-direction: column;
-    max-width: 75vw;
-    max-height: 75vh;
     padding: 0;
     box-sizing: border-box;
     border: none;
