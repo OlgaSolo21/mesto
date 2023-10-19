@@ -9,6 +9,6 @@ export default class Section {
     }
 
     addItem(element) { // публичный метод, который принимает DOM-элемент и добавляет его в контейнер.
-        this._container.append(element);
+        this._container.prepend(element);
     }
 }

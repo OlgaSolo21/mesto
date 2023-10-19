@@ -52,7 +52,7 @@ export default class Api {
             .then(this._handleResponse)
     }
 
-    setLikeCardPut() { // Постановка лайка
+    setLikeCardPut(cardId) { // Постановка лайка
         return fetch(`${this._url}/cards/${cardId}/likes`, {
             headers: this._headers,
             method: 'PUT'
@@ -60,10 +60,29 @@ export default class Api {
             .then(this._handleResponse)
     }
 
-    deleteLikeCard() { // Снятие лайка
+    deleteLikeCard(cardId) { // Снятие лайка
         return fetch(`${this._url}/cards/${cardId}/likes`, {
             headers: this._headers,
             method: 'DELETE'
+        })
+            .then(this._handleResponse)
+    }
+
+    deleteCard(cardId) { // Удалкние карточки с сервера
+        return fetch(`${this._url}/cards/${cardId}`, {
+            headers: this._headers,
+            method: 'DELETE'
+        })
+            .then(this._handleResponse)
+    }
+
+    updateAvatarPatch (data) { // Обновление аватара пользователя
+        return fetch(`${this._url}/users/me/avatar`, {
+            headers: this._headers,
+            method: 'PATCH',
+            body: JSON.stringify({
+                avatar: data.AvatarLink
+            })
         })
             .then(this._handleResponse)
     }

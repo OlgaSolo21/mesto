@@ -4,24 +4,28 @@ export default class FormValidator {
         this._formElement = formElement
         this._submitButtonPopup = this._formElement.querySelector(this._config.submitButtonSelector)
         this._inputList = Array.from(this._formElement.querySelectorAll(this._config.inputSelector))
+        this._errorTextClass = config.errorClass
     }
 
     _showErrorInput(inputItem, errorSpanText) { // функция показать ошибку при невалидном поле
-        errorSpanText.textContent = inputItem.validationMessage // переменная спан ошибки принимает свойство текста ошибки (из вебинара)
+        const errorSpan = this._formElement.querySelector(`#${inputItem.name}-error`) // создаем переменную и находим все спаны (текст ошибки)
+        errorSpan.textContent = errorSpanText
+        errorSpan.classList.add(this._errorTextClass)
         inputItem.classList.add(this._config.inputErrorClass) // при показе текста добавляем класс со стилем ошибки
     }
 
-    _hideErrorInput(inputItem, errorSpanText) { // функция скрыть ошибку при невалидном поле
-        errorSpanText.textContent = ''
-        inputItem.classList.remove(this._config.inputErrorClass) // при показе текста удаляем класс со стилем ошибки
+    _hideErrorInput(inputItem) { // функция скрыть ошибку при невалидном поле
+        const errorSpan = this._formElement.querySelector(`#${inputItem.name}-error`) // создаем переменную и находим все спаны (текст ошибки)
+        errorSpan.textContent = ''
+        errorSpan.classList.remove(this._errorTextClass)
+        inputItem.classList.remove(this._config.inputErrorClass) // при показе текста добавляем класс со стилем ошибки
     }
 
     _checkInputValidity(inputItem) { // функция проверки полей на валидность
-        const errorSpanText = this._formElement.querySelector(`#${inputItem.name}-error`) // создаем переменную и находим все спаны (текст ошибки)
         if (!inputItem.validity.valid) { // если инпут поле не валидно вызвать функцию ошибки
-            this._showErrorInput(inputItem, errorSpanText)
+            this._showErrorInput(inputItem, inputItem.validationMessage)
         } else { // иначе если поле валидно скрывать ошибку
-            this._hideErrorInput(inputItem, errorSpanText)
+            this._hideErrorInput(inputItem)
         }
     }
 
@@ -32,36 +36,45 @@ export default class FormValidator {
         })
     }
 
-    _checkInvalidButton() { // функция проверки валидности кнопки при добавлении2й карточки(для index.js)
+    _disabledButton() { // функция проверки валидности кнопки при добавлении2й карточки(для index.js)
         this._submitButtonPopup.classList.add(this._config.inactiveButtonClass)
-        this._submitButtonPopup.disabled = 'invalid'
+        this._submitButtonPopup.disabled = true
+    }
+
+    _activeButton() {
+        this._submitButtonPopup.classList.remove(this._config.inactiveButtonClass)
+        this._submitButtonPopup.disabled = false
     }
 
     _toggleButtonState() { // функция переключения состояния кнопки если не/валидна
-        if (this._hasInvalidInput()) { // если поле невалидно
-            this._checkInvalidButton()
+        if (this._hasInvalidInput(this._inputList)) { // если поле невалидно
+            this._disabledButton()
         } else { // иначе если валидно
-            this._submitButtonPopup.classList.remove(this._config.inactiveButtonClass)
-            this._submitButtonPopup.disabled = false
+            this._activeButton()
         }
     }
 
     _setEventListener() { // функция установки слушателей событий
+        this._toggleButtonState()
         this._inputList.forEach(inputItem => { // перебираем каждый инпут и вешаем обработчик и событие ввод
             inputItem.addEventListener('input', () => { // событие ввода и фукнция проверки поля на валидность
-                this._toggleButtonState()
+                this._toggleButtonState(this._inputList)
                 this._checkInputValidity(inputItem)
-                //console.log(1)
             })
         })
-        this._formElement.addEventListener('submit', (evt) => { // обработчик на кнопку и отмена стандартной отправки
-            evt.preventDefault()
-            this._toggleButtonState()
-        })
-        this._toggleButtonState()
     }
 
     enableValidation() { // функция включения валидации формы, которую передаем в конструктор
+        this._formElement.addEventListener('submit', (evt) => { // обработчик на кнопку и отмена стандартной отправки
+            evt.preventDefault()
+        })
         this._setEventListener()
+}
+
+    resetButtonPopup() { // сбросим валидацию для ux кнопки
+        this._inputList.forEach((inputItem) => {
+            this._hideErrorInput(inputItem)
+        })
+        this._toggleButtonState()
     }
 }

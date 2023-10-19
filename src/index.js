@@ -14,10 +14,10 @@ import {
     nameEditInput,
     jobEditInput,
     buttonAddPopup,
-    titleAddInput,
-    imageAddInput
+    popupAddFormValidation, popupEditFormValidation, popupUpdateAvatarValidation,
 } from './utils/constants.js'
 import Api from "./components/Api.js";
+import PopupWithFormDeleteCard from "./components/PopupWithFormDeleteCard.js";
 
 // сделать запрос к серверу
 const apiConfig = {
@@ -50,6 +50,10 @@ function createCard(data) {
         {
             data: data,
             userId: userId,
+            cardId: cardId,
+            owner: {_id: userId},
+            likes: data.likes,
+            _id: data._id,
             handleCardFullscreen: openFullScreenPopup, // тут функция отурытия фото на весь экран
             handleSetLike: (cardId) => { // тут функция отображения лайков
                 api.setLikeCardPut(cardId)
@@ -59,9 +63,29 @@ function createCard(data) {
                     .catch((err) => {
                         console.log(err);
                     })
-            }
-            // тут фукция удаления лайков
-            // тут фуекция удаления карточки на корзину
+            },
+            handleDeleteLike: (cardId) => { // тут фукция удаления лайков
+                api.deleteLikeCard(cardId)
+                    .then((data) => {
+                        card.changeAmountLikes(data)
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            },
+            trashCardItem: (cardId) => {// тут фуекция удаления карточки на корзину
+                popupDeleteCard.open()
+                popupDeleteCard.submitDeleteCallback(() => {
+                    api.deleteCard(cardId)
+                        .then(() => {
+                            popupDeleteCard.close()
+                            card.removeCard()
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        })
+                })
+            },
         })
     return card.generateCard() // возвращаем функцию публикации карточки
 }
@@ -78,7 +102,7 @@ const section = new Section({ //создание карточек из клас�
 const popupAddForm = new PopupWithForm({
     popupSelector: '#add-card',
     handleFormSubmitCallback: (data) => { // используем api
-        console.log(data)
+        popupAddForm.renderLoadingUX(true)
         api.addNewCardPost(data)
             .then((res) => {
                 section.addItem(createCard(res)) // section отрисовывает новую карточку в разметку
@@ -87,9 +111,15 @@ const popupAddForm = new PopupWithForm({
             .catch((err) => {
                 console.log(err);
             })
+            .finally(() => {
+                popupAddForm.renderLoadingUX(false)
+            })
     }
-},)
-buttonAddPopup.addEventListener('click', () => {popupAddForm.open()}) // слушатель кнопки открытия попапа добавления новой карточки с местом
+})
+buttonAddPopup.addEventListener('click', () => {
+    validateAddPopup.resetButtonPopup()
+    popupAddForm.open()
+}) // слушатель кнопки открытия попапа добавления новой карточки с местом
 popupAddForm.setEventListeners() // слушатели закрытия
 
 
@@ -100,17 +130,10 @@ const userInfo = new UserInfo({ // создаем экземпляр класс�
     avatarEditProfile: '.profile__avatar'
 })
 
-// слушатель кнопки открытия попапа редактирования профиля
-buttonEditPopup.addEventListener('click', () => {
-    const userElement = userInfo.getUserInfo()
-    nameEditInput.value = userElement.name
-    jobEditInput.value = userElement.about
-    popupEditForm.open()
-})
-
 const popupEditForm = new PopupWithForm({
     popupSelector: '#edit-profile',
     handleFormSubmitCallback: (data) => {
+        popupEditForm.renderLoadingUX(true)
         api.editProfilePatch(data)
             .then((res) => {
                 userInfo.setUserInfo(res)
@@ -119,9 +142,45 @@ const popupEditForm = new PopupWithForm({
             .catch((err) => {
                 console.log(err);
             })
+            .finally(() => {
+                popupEditForm.renderLoadingUX(false)
+            })
     }
 })
+
+// слушатель кнопки открытия попапа редактирования профиля
+buttonEditPopup.addEventListener('click', () => {
+    validateEditPopup.resetButtonPopup()
+    const userElement = userInfo.getUserInfo()
+    nameEditInput.value = userElement.name
+    jobEditInput.value = userElement.about
+    popupEditForm.open()
+})
 popupEditForm.setEventListeners() // слушатели попапа редактирования
+
+// ПОПАП ИЗМЕНЕНИЯ АВАТАРА
+const popupUpdateAvatar = new PopupWithForm({
+    popupSelector: '#edit-avatar-profile',
+    handleFormSubmitCallback: (data) => {
+        popupUpdateAvatar.renderLoadingUX(true)
+        api.updateAvatarPatch(data)
+            .then((res) => {
+                userInfo.setUserInfo(res)
+                popupUpdateAvatar.close()
+        })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                popupUpdateAvatar.renderLoadingUX(false)
+            })
+    }
+})
+avatarEditProfile.addEventListener('click', () => {
+    popupUpdateAvatar.open()
+    validateUpdateAvatarPopup.resetButtonPopup()
+}) // слушатель кнопки открытия попапа редактирования аватара
+popupUpdateAvatar.setEventListeners() // слушатели попапа редактирования аватара
 
 // ПОПАП ОТКРЫТИЯ КАРТОЧКИ НА ВЕСЬ ЭКРАН
 const fullScreenImage = new PopupWithImage('.popup_fullscreen')
@@ -130,8 +189,21 @@ function openFullScreenPopup(img, title) { // функция открытия п
 }
 fullScreenImage.setEventListeners() // слушатели закрытия фото на весь экран
 
+//ПОПАП УДАЛЕНИЯ КАРТОЧКИ
+const popupDeleteCard = new PopupWithFormDeleteCard('#delete-card')
+popupDeleteCard.setEventListeners()
 
-forms.forEach((formElement) => { // экземпляр класса валидации
-    const formValidator = new FormValidator(configForm, formElement)
-    formValidator.enableValidation()
-})
+// ВАЛИДАЦИЯ ПОЛЕЙ
+const validateAddPopup = new FormValidator(configForm, popupAddFormValidation)
+validateAddPopup.enableValidation()
+
+const validateEditPopup = new FormValidator(configForm, popupEditFormValidation)
+validateEditPopup.enableValidation()
+
+const validateUpdateAvatarPopup = new FormValidator(configForm, popupUpdateAvatarValidation)
+validateUpdateAvatarPopup.enableValidation()
+
+// forms.forEach((formElement) => { // экземпляр класса валидации
+//     const formValidator = new FormValidator(configForm, formElement)
+//     formValidator.enableValidation()
+// })

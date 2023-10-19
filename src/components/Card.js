@@ -1,16 +1,19 @@
 export default class Card { // создаем класс карточки, в ней будет вся разметка, создание новой карточки и все функции
-    constructor(templateSelector, {data, userId, handleCardFullscreen, handleSetLike, trashCardItem}) {
+    constructor(templateSelector, {
+        data, userId,
+        handleCardFullscreen, handleSetLike, trashCardItem, handleDeleteLike}) {
         this._data = data
         this._name = data.name
         this._link = data.link
         this._likes = data.likes
-        this._userId = userId;// айди пользователя
-        this._cardOwnerId = data.owner._id; // айди создателя карточки
+        this._userId = userId// айди пользователя
+        this._cardOwnerId = data.owner._id // айди создателя карточки
         this._cardId = data._id// айди карточки
         this._templateSelector = templateSelector
         this.handleCardFullscreen = handleCardFullscreen
         this._handleSetLike = handleSetLike
-        this._trashCardItem = trashCardItem
+        this._trashCardItem = trashCardItem // метод удаления карточки
+        this._handleDeleteLike = handleDeleteLike;// метод удаления лайка
     }
 
     generateCard() { //готовим карточку к публикации
@@ -44,7 +47,7 @@ export default class Card { // создаем класс карточки, в н
         })
         this.likeButton.addEventListener('click', () => { // лайк карточки постановка и снятие
             if (this.likeButton.classList.contains('cards__like_active')) {
-                //удалить лайк
+                this._handleDeleteLike(this._cardId)
             } else {
                 this._handleSetLike(this._cardId)
             }
@@ -55,7 +58,7 @@ export default class Card { // создаем класс карточки, в н
     }
 
     changeAmountLikes(data) { // изменение количества лайков
-        this._likes = data.likes
+        this._likes = data.likes;
         this.likeAmount.textContent = this._likes.length
         this.likeButton.classList.toggle('cards__like_active')
     }
