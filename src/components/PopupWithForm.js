@@ -7,7 +7,7 @@ export default class PopupWithForm extends Popup{
         this._popupForm = this._popupSelector.querySelector('.popup__content')
         this._inputList = this._popupForm.querySelectorAll('.popup__input')
         this._buttonSubmitForm = this._popupForm.querySelector('.popup__submit')
-        this._buttonSubmitTextUX = this._buttonSubmitForm
+        this._buttonSubmitTextUX = this._buttonSubmitForm.textContent
     }
 
     _getInputValues() {
@@ -34,7 +34,7 @@ export default class PopupWithForm extends Popup{
 
     renderLoadingUX(isLoading, message = 'Сохранение...') {
         if (isLoading) {
-            this._buttonSubmitForm.textContent = message
+            this._buttonSubmitForm.textContent = message.toString()
         } else {
             this._buttonSubmitForm.textContent = this._buttonSubmitTextUX
         }
